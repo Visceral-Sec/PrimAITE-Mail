@@ -1,1 +1,0 @@
-"""Configuration components for PrimAITE-Mail extension."""

@@ -1,1 +1,0 @@
-"""Email protocol implementations (SMTP, POP3, IMAP)."""

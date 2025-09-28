@@ -1,1 +1,0 @@
-"""Simulation layer components for PrimAITE-Mail extension."""

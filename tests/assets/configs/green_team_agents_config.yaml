@@ -1,0 +1,185 @@
+# Green team agent configuration for comprehensive email security demonstration
+# Includes Alice (marketing), Bob (developer), Charlie (assistant), and Remote User
+
+simulation:
+  network:
+    nodes:
+      # Email infrastructure
+      mail_server:
+        hostname: "mail_server"
+        type: "computer"
+        ip_address: "192.168.100.10"
+        default_gateway: "192.168.100.1"
+        services:
+          - type: "smtp-server"
+            domain: "enterprise.com"
+            max_message_size: 10485760  # 10MB
+            require_auth: false
+            enable_security_logging: true
+          - type: "pop3-server"
+            domain: "enterprise.com"
+            require_auth: false
+
+      # Alice - Marketing Manager Workstation
+      alice_workstation:
+        hostname: "alice_workstation"
+        type: "computer"
+        ip_address: "192.168.1.20"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "alice@enterprise.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+
+      # Bob - Developer Workstation
+      bob_workstation:
+        hostname: "bob_workstation"
+        type: "computer"
+        ip_address: "192.168.1.30"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "bob@enterprise.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+
+      # Charlie - Executive Assistant Workstation
+      charlie_workstation:
+        hostname: "charlie_workstation"
+        type: "computer"
+        ip_address: "192.168.1.40"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "charlie@enterprise.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+
+      # Remote User Workstation
+      remote_workstation:
+        hostname: "remote_workstation"
+        type: "computer"
+        ip_address: "192.168.50.10"
+        default_gateway: "192.168.50.1"
+        applications:
+          - type: "email-client"
+            username: "remote@enterprise.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+
+# Game configuration with green team agents
+game:
+  agents:
+    # Alice - Marketing Manager Agent
+    alice_marketing:
+      type: "alice-marketing-agent"
+      ref: "alice_marketing"
+      agent_settings:
+        node_name: "alice_workstation"
+        sender_email: "alice@enterprise.com"
+        send_probability: 0.7
+        retrieve_probability: 0.2
+        idle_probability: 0.1
+        email_frequency: 6
+        email_variance: 2
+        attachment_probability: 0.4
+        internal_recipients:
+          - "bob@enterprise.com"
+          - "charlie@enterprise.com"
+          - "security@enterprise.com"
+        external_recipients:
+          - "partner@client.com"
+          - "contact@vendor.com"
+          - "info@supplier.com"
+          - "marketing@partner.org"
+
+    # Bob - Developer Agent
+    bob_developer:
+      type: "bob-developer-agent"
+      ref: "bob_developer"
+      agent_settings:
+        node_name: "bob_workstation"
+        sender_email: "bob@enterprise.com"
+        send_probability: 0.5
+        retrieve_probability: 0.4
+        idle_probability: 0.1
+        email_frequency: 10
+        email_variance: 4
+        attachment_probability: 0.6
+        team_recipients:
+          - "alice@enterprise.com"
+          - "charlie@enterprise.com"
+          - "security@enterprise.com"
+          - "lead@enterprise.com"
+          - "qa@enterprise.com"
+        external_recipients:
+          - "support@vendor.com"
+          - "api@service.com"
+          - "tech@partner.org"
+
+    # Charlie - Executive Assistant Agent
+    charlie_assistant:
+      type: "charlie-assistant-agent"
+      ref: "charlie_assistant"
+      agent_settings:
+        node_name: "charlie_workstation"
+        sender_email: "charlie@enterprise.com"
+        send_probability: 0.6
+        retrieve_probability: 0.3
+        idle_probability: 0.1
+        email_frequency: 7
+        email_variance: 3
+        attachment_probability: 0.5
+        multi_recipient_probability: 0.4
+        all_staff:
+          - "alice@enterprise.com"
+          - "bob@enterprise.com"
+          - "security@enterprise.com"
+          - "lead@enterprise.com"
+          - "qa@enterprise.com"
+          - "hr@enterprise.com"
+        management_team:
+          - "ceo@enterprise.com"
+          - "cto@enterprise.com"
+          - "lead@enterprise.com"
+          - "security@enterprise.com"
+        external_contacts:
+          - "client@partner.com"
+          - "vendor@supplier.com"
+          - "contact@service.org"
+
+    # Remote User Agent
+    remote_user:
+      type: "remote-user-agent"
+      ref: "remote_user"
+      agent_settings:
+        node_name: "remote_workstation"
+        sender_email: "remote@enterprise.com"
+        send_probability: 0.3
+        retrieve_probability: 0.5
+        idle_probability: 0.2
+        email_frequency: 15
+        email_variance: 8
+        attachment_probability: 0.2
+        risky_behavior_probability: 0.1
+        primary_contacts:
+          - "alice@enterprise.com"
+          - "charlie@enterprise.com"
+          - "security@enterprise.com"
+        team_contacts:
+          - "bob@enterprise.com"
+          - "lead@enterprise.com"
+          - "qa@enterprise.com"
+        external_contacts:
+          - "client@remote.com"
+          - "support@vendor.com"
+
+# This configuration provides:
+# 1. Four distinct green team agent types with realistic behavior patterns
+# 2. Alice focuses on marketing communications with external outreach
+# 3. Bob handles technical communications with high attachment usage
+# 4. Charlie manages administrative tasks with multi-recipient emails
+# 5. Remote user exhibits occasional access with potential security risks
+# 6. Each agent has appropriate timing, probability, and recipient configurations
+# 7. Realistic email frequency and variance patterns for different roles

@@ -1,0 +1,457 @@
+# Base Agent Behaviors Configuration Template
+# Modular agent behavior patterns for green, blue, and red team agents
+# This template provides the foundation for all agent configurations
+
+# Template metadata
+template:
+  name: "agent_behaviors_base"
+  version: "1.0"
+  description: "Base agent behavior patterns for email security demonstrations"
+  category: "agents"
+  extends: null
+  variables:
+    - name: "domain_name"
+      type: "string"
+      default: "demo.company.com"
+      description: "Primary domain name for email addresses"
+    - name: "mail_server_ip"
+      type: "string"
+      default: "192.168.100.10"
+      description: "IP address of the mail server"
+    - name: "simulation_steps"
+      type: "integer"
+      default: 100
+      description: "Number of simulation steps"
+    - name: "agent_activity_level"
+      type: "string"
+      default: "normal"
+      description: "Agent activity level: low, normal, high"
+
+# Base agent behavior configurations
+agent_behaviors:
+  # Green Team Agent Behaviors
+  green_team:
+    # Alice - Marketing Manager
+    alice_marketing:
+      agent_type: "alice-marketing-agent"
+      node_name: "alice_workstation"
+      sender_email: "alice@${domain_name}"
+      
+      # Behavior probabilities
+      behavior_patterns:
+        send_probability: 0.7
+        retrieve_probability: 0.2
+        idle_probability: 0.1
+        
+      # Email characteristics
+      email_patterns:
+        frequency: 6
+        variance: 2
+        attachment_probability: 0.4
+        external_communication_probability: 0.6
+        
+      # Recipient lists
+      recipients:
+        internal_recipients:
+          - "bob@${domain_name}"
+          - "charlie@${domain_name}"
+          - "security@${domain_name}"
+          - "lead@${domain_name}"
+        external_recipients:
+          - "partner@client.com"
+          - "contact@vendor.com"
+          - "info@supplier.com"
+          - "marketing@partner.org"
+          - "newsletter@industry.com"
+        
+      # Email templates and subjects
+      email_templates:
+        marketing_newsletter:
+          subject_patterns:
+            - "Monthly Newsletter - ${month}"
+            - "Product Update: New Features"
+            - "Marketing Campaign Results"
+          attachment_types: ["pdf", "docx", "png"]
+          
+        external_communication:
+          subject_patterns:
+            - "Partnership Opportunity"
+            - "Marketing Collaboration"
+            - "Event Invitation"
+          attachment_types: ["pdf", "pptx"]
+          
+        internal_updates:
+          subject_patterns:
+            - "Marketing Report Q${quarter}"
+            - "Campaign Performance Update"
+            - "Budget Planning Meeting"
+          attachment_types: ["xlsx", "pdf"]
+
+    # Bob - Developer
+    bob_developer:
+      agent_type: "bob-developer-agent"
+      node_name: "bob_workstation"
+      sender_email: "bob@${domain_name}"
+      
+      # Behavior probabilities
+      behavior_patterns:
+        send_probability: 0.5
+        retrieve_probability: 0.4
+        idle_probability: 0.1
+        
+      # Email characteristics
+      email_patterns:
+        frequency: 10
+        variance: 4
+        attachment_probability: 0.6
+        technical_communication_probability: 0.8
+        
+      # Recipient lists
+      recipients:
+        team_recipients:
+          - "alice@${domain_name}"
+          - "charlie@${domain_name}"
+          - "security@${domain_name}"
+          - "lead@${domain_name}"
+          - "qa@${domain_name}"
+        external_recipients:
+          - "support@vendor.com"
+          - "api@service.com"
+          - "tech@partner.org"
+          - "dev@opensource.org"
+        
+      # Email templates
+      email_templates:
+        code_review:
+          subject_patterns:
+            - "Code Review: ${feature_name}"
+            - "Pull Request #${number}"
+            - "Technical Review Required"
+          attachment_types: ["zip", "txt", "pdf"]
+          
+        technical_documentation:
+          subject_patterns:
+            - "API Documentation Update"
+            - "Technical Specification v${version}"
+            - "Architecture Design Review"
+          attachment_types: ["pdf", "docx", "html"]
+          
+        bug_reports:
+          subject_patterns:
+            - "Bug Report: ${issue_id}"
+            - "Critical Issue Found"
+            - "Performance Analysis"
+          attachment_types: ["txt", "log", "png"]
+
+    # Charlie - Executive Assistant
+    charlie_assistant:
+      agent_type: "charlie-assistant-agent"
+      node_name: "charlie_workstation"
+      sender_email: "charlie@${domain_name}"
+      
+      # Behavior probabilities
+      behavior_patterns:
+        send_probability: 0.6
+        retrieve_probability: 0.3
+        idle_probability: 0.1
+        
+      # Email characteristics
+      email_patterns:
+        frequency: 7
+        variance: 3
+        attachment_probability: 0.5
+        multi_recipient_probability: 0.4
+        
+      # Recipient lists
+      recipients:
+        all_staff:
+          - "alice@${domain_name}"
+          - "bob@${domain_name}"
+          - "security@${domain_name}"
+          - "lead@${domain_name}"
+          - "qa@${domain_name}"
+          - "hr@${domain_name}"
+        management_team:
+          - "ceo@${domain_name}"
+          - "cto@${domain_name}"
+          - "lead@${domain_name}"
+          - "security@${domain_name}"
+        external_contacts:
+          - "client@partner.com"
+          - "vendor@supplier.com"
+          - "contact@service.org"
+        
+      # Email templates
+      email_templates:
+        meeting_coordination:
+          subject_patterns:
+            - "Meeting Schedule: ${meeting_topic}"
+            - "Calendar Update - ${date}"
+            - "Conference Room Booking"
+          attachment_types: ["ics", "pdf", "docx"]
+          
+        document_distribution:
+          subject_patterns:
+            - "Policy Update: ${policy_name}"
+            - "Company Announcement"
+            - "Quarterly Report Distribution"
+          attachment_types: ["pdf", "docx", "xlsx"]
+          
+        administrative_tasks:
+          subject_patterns:
+            - "Travel Arrangements for ${person}"
+            - "Expense Report Reminder"
+            - "HR Documentation"
+          attachment_types: ["pdf", "xlsx"]
+
+    # Remote User
+    remote_user:
+      agent_type: "remote-user-agent"
+      node_name: "remote_workstation"
+      sender_email: "remote@${domain_name}"
+      
+      # Behavior probabilities
+      behavior_patterns:
+        send_probability: 0.3
+        retrieve_probability: 0.5
+        idle_probability: 0.2
+        
+      # Email characteristics
+      email_patterns:
+        frequency: 15
+        variance: 8
+        attachment_probability: 0.2
+        risky_behavior_probability: 0.1
+        
+      # Recipient lists
+      recipients:
+        primary_contacts:
+          - "alice@${domain_name}"
+          - "charlie@${domain_name}"
+          - "security@${domain_name}"
+        team_contacts:
+          - "bob@${domain_name}"
+          - "lead@${domain_name}"
+          - "qa@${domain_name}"
+        external_contacts:
+          - "client@remote.com"
+          - "support@vendor.com"
+          - "field@partner.org"
+        
+      # Email templates
+      email_templates:
+        field_reports:
+          subject_patterns:
+            - "Field Report - ${location}"
+            - "Client Visit Summary"
+            - "Remote Work Update"
+          attachment_types: ["pdf", "docx", "jpg"]
+          
+        support_requests:
+          subject_patterns:
+            - "Technical Support Needed"
+            - "VPN Connection Issues"
+            - "Software Installation Help"
+          attachment_types: ["txt", "png"]
+
+  # Blue Team Agent Behaviors
+  blue_team:
+    # Email Security Analyst
+    email_security_analyst:
+      agent_type: "email-security-analyst-agent"
+      node_name: "security_workstation"
+      sender_email: "security@${domain_name}"
+      smtp_server_node: "mail_server"
+      
+      # Behavior probabilities
+      behavior_patterns:
+        monitor_probability: 0.4
+        policy_update_probability: 0.3
+        threat_response_probability: 0.25
+        idle_probability: 0.05
+        
+      # Analysis characteristics
+      analysis_patterns:
+        frequency: 6
+        variance: 2
+        proactive_monitoring: true
+        automated_response: true
+        
+      # Security actions
+      security_actions:
+        monitoring:
+          - "list_security_policies"
+          - "get_security_statistics"
+          - "check_blocked_senders"
+          - "review_security_events"
+        
+        policy_management:
+          - "block_sender"
+          - "unblock_sender"
+          - "block_ip_address"
+          - "unblock_ip_address"
+        
+        threat_response:
+          - "quarantine_email"
+          - "investigate_threat"
+          - "update_security_policies"
+          - "generate_security_report"
+
+    # Incident Response Agent
+    incident_responder:
+      agent_type: "incident-response-agent"
+      node_name: "incident_response_workstation"
+      sender_email: "responder@${domain_name}"
+      smtp_server_node: "mail_server"
+      
+      # Behavior probabilities
+      behavior_patterns:
+        investigate_probability: 0.4
+        containment_probability: 0.35
+        forensics_probability: 0.2
+        idle_probability: 0.05
+        
+      # Response characteristics
+      response_patterns:
+        frequency: 5
+        variance: 2
+        rapid_response: true
+        forensic_analysis: true
+        
+      # Response actions
+      response_actions:
+        investigation:
+          - "analyze_security_events"
+          - "trace_attack_source"
+          - "assess_impact"
+          - "collect_evidence"
+        
+        containment:
+          - "block_malicious_sources"
+          - "quarantine_affected_systems"
+          - "isolate_compromised_accounts"
+          - "implement_emergency_policies"
+        
+        recovery:
+          - "restore_services"
+          - "update_security_measures"
+          - "document_incident"
+          - "conduct_post_incident_review"
+
+  # Red Team Agent Behaviors
+  red_team:
+    # Email Phishing Agent
+    email_phishing_agent:
+      agent_type: "email-phishing-agent"
+      node_name: "attacker_system"
+      sender_email: "legitimate@external.com"
+      
+      # Attack probabilities
+      behavior_patterns:
+        phishing_probability: 0.6
+        reconnaissance_probability: 0.2
+        payload_delivery_probability: 0.15
+        idle_probability: 0.05
+        
+      # Attack characteristics
+      attack_patterns:
+        frequency: 8
+        variance: 4
+        target_profiling: true
+        social_engineering: true
+        
+      # Attack vectors
+      attack_vectors:
+        phishing_campaigns:
+          - "credential_harvesting"
+          - "malware_delivery"
+          - "business_email_compromise"
+          - "spear_phishing"
+        
+        reconnaissance:
+          - "email_enumeration"
+          - "domain_reconnaissance"
+          - "social_media_profiling"
+          - "organizational_mapping"
+        
+        payload_delivery:
+          - "malicious_attachments"
+          - "malicious_links"
+          - "embedded_scripts"
+          - "document_exploits"
+
+    # C2 Beacon Simulator
+    c2_beacon_simulator:
+      agent_type: "c2-beacon-simulator"
+      node_name: "c2_server"
+      
+      # C2 probabilities
+      behavior_patterns:
+        beacon_probability: 0.5
+        command_execution_probability: 0.3
+        data_exfiltration_probability: 0.15
+        idle_probability: 0.05
+        
+      # C2 characteristics
+      c2_patterns:
+        frequency: 12
+        variance: 6
+        stealth_mode: true
+        persistence: true
+        
+      # C2 capabilities
+      c2_capabilities:
+        command_control:
+          - "execute_commands"
+          - "download_files"
+          - "upload_files"
+          - "lateral_movement"
+        
+        data_exfiltration:
+          - "steal_credentials"
+          - "exfiltrate_documents"
+          - "capture_screenshots"
+          - "keylog_data"
+        
+        persistence:
+          - "maintain_access"
+          - "create_backdoors"
+          - "escalate_privileges"
+          - "avoid_detection"
+
+# Configuration metadata
+metadata:
+  template_type: "base"
+  category: "agent_behaviors"
+  version: "1.0"
+  description: "Base agent behavior patterns for email security demonstrations"
+  created_date: "2025-01-27"
+  
+  agent_types:
+    green_team:
+      - "Alice Marketing Manager"
+      - "Bob Developer"
+      - "Charlie Executive Assistant"
+      - "Remote User"
+    blue_team:
+      - "Email Security Analyst"
+      - "Incident Response Agent"
+    red_team:
+      - "Email Phishing Agent"
+      - "C2 Beacon Simulator"
+  
+  behavior_features:
+    - "Realistic timing patterns"
+    - "Role-appropriate communication"
+    - "Attachment usage patterns"
+    - "Recipient targeting"
+    - "Security-aware behaviors"
+    - "Attack simulation capabilities"
+  
+  customization_points:
+    - "Behavior probabilities"
+    - "Email frequency patterns"
+    - "Recipient lists"
+    - "Email templates"
+    - "Security actions"
+    - "Attack vectors"

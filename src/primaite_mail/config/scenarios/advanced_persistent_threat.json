@@ -1,0 +1,506 @@
+{
+  "scenario": {
+    "name": "advanced_persistent_threat",
+    "version": "1.0",
+    "description": "Advanced persistent threat scenario with full attack chain from phishing to data exfiltration",
+    "duration_steps": 200,
+    "category": "advanced_attack_simulation",
+    "learning_objectives": [
+      "Understand APT attack methodologies",
+      "Learn long-term compromise techniques",
+      "Observe lateral movement and persistence",
+      "Analyze data exfiltration methods"
+    ]
+  },
+  
+  "configuration": {
+    "extends": [
+      "templates/base/network_topology_base.yaml",
+      "templates/base/email_services_base.yaml",
+      "templates/base/agent_behaviors_base.yaml",
+      "templates/base/security_policies_base.yaml"
+    ],
+    
+    "variables": {
+      "domain_name": "demo.company.com",
+      "mail_server_ip": "192.168.100.10",
+      "dns_server_ip": "192.168.100.20",
+      "security_level": "standard",
+      "simulation_steps": 200,
+      "agent_activity_level": "high"
+    }
+  },
+  
+  "agents": {
+    "enabled_teams": ["green_team", "blue_team", "red_team"],
+    "disabled_teams": [],
+    
+    "green_team": {
+      "alice_marketing": {
+        "enabled": true,
+        "behavior_overrides": {
+          "send_probability": 0.5,
+          "retrieve_probability": 0.4,
+          "idle_probability": 0.1,
+          "email_frequency": 12,
+          "security_awareness": "medium"
+        },
+        "compromise_profile": {
+          "initial_target": true,
+          "lateral_movement_value": "high",
+          "data_access": ["marketing_database", "customer_contacts", "campaign_data"]
+        }
+      },
+      
+      "bob_developer": {
+        "enabled": true,
+        "behavior_overrides": {
+          "send_probability": 0.4,
+          "retrieve_probability": 0.5,
+          "idle_probability": 0.1,
+          "email_frequency": 15,
+          "security_awareness": "high"
+        },
+        "compromise_profile": {
+          "initial_target": false,
+          "lateral_movement_value": "critical",
+          "data_access": ["source_code", "technical_docs", "system_credentials"]
+        }
+      },
+      
+      "charlie_assistant": {
+        "enabled": true,
+        "behavior_overrides": {
+          "send_probability": 0.4,
+          "retrieve_probability": 0.5,
+          "idle_probability": 0.1,
+          "email_frequency": 14,
+          "security_awareness": "medium"
+        },
+        "compromise_profile": {
+          "initial_target": true,
+          "lateral_movement_value": "high",
+          "data_access": ["executive_communications", "financial_data", "strategic_plans"]
+        }
+      },
+      
+      "remote_user": {
+        "enabled": true,
+        "behavior_overrides": {
+          "send_probability": 0.2,
+          "retrieve_probability": 0.7,
+          "idle_probability": 0.1,
+          "email_frequency": 30,
+          "security_awareness": "low"
+        },
+        "compromise_profile": {
+          "initial_target": true,
+          "lateral_movement_value": "medium",
+          "data_access": ["field_reports", "client_data", "vpn_credentials"]
+        }
+      }
+    },
+    
+    "blue_team": {
+      "email_security_analyst": {
+        "enabled": true,
+        "node_name": "security_workstation",
+        "behavior_overrides": {
+          "monitor_probability": 0.4,
+          "policy_update_probability": 0.3,
+          "threat_response_probability": 0.25,
+          "idle_probability": 0.05,
+          "analysis_frequency": 6
+        },
+        "detection_capabilities": {
+          "apt_indicators": "medium",
+          "behavioral_analysis": "standard",
+          "threat_intelligence": "basic"
+        }
+      },
+      
+      "incident_responder": {
+        "enabled": true,
+        "node_name": "incident_response_workstation",
+        "behavior_overrides": {
+          "investigate_probability": 0.35,
+          "containment_probability": 0.3,
+          "forensics_probability": 0.3,
+          "idle_probability": 0.05,
+          "response_frequency": 8
+        },
+        "response_capabilities": {
+          "apt_investigation": "advanced",
+          "forensic_analysis": "expert",
+          "containment_speed": "rapid"
+        }
+      }
+    },
+    
+    "red_team": {
+      "apt_orchestrator": {
+        "enabled": true,
+        "node_name": "apt_command_center",
+        "behavior_overrides": {
+          "campaign_planning_probability": 0.3,
+          "target_selection_probability": 0.2,
+          "operation_coordination_probability": 0.4,
+          "intelligence_analysis_probability": 0.1
+        },
+        "apt_configuration": {
+          "campaign_duration": "long_term",
+          "stealth_priority": "maximum",
+          "persistence_methods": "multiple",
+          "data_objectives": ["intellectual_property", "financial_data", "strategic_intelligence"]
+        }
+      },
+      
+      "email_phishing_agent": {
+        "enabled": true,
+        "node_name": "attacker_system",
+        "sender_email": "legitimate@external.com",
+        "behavior_overrides": {
+          "spear_phishing_probability": 0.6,
+          "reconnaissance_probability": 0.3,
+          "social_engineering_probability": 0.1,
+          "email_frequency": 8
+        },
+        "apt_phishing_config": {
+          "target_research": "extensive",
+          "personalization": "high",
+          "evasion_techniques": "advanced",
+          "payload_sophistication": "state_level"
+        }
+      },
+      
+      "c2_beacon_simulator": {
+        "enabled": true,
+        "node_name": "c2_server",
+        "behavior_overrides": {
+          "beacon_probability": 0.3,
+          "command_execution_probability": 0.25,
+          "lateral_movement_probability": 0.2,
+          "data_exfiltration_probability": 0.15,
+          "persistence_probability": 0.1
+        },
+        "apt_c2_config": {
+          "communication_encryption": "military_grade",
+          "beacon_frequency": "variable",
+          "stealth_techniques": "advanced",
+          "persistence_mechanisms": "multiple"
+        }
+      },
+      
+      "data_exfiltration_agent": {
+        "enabled": true,
+        "node_name": "exfiltration_server",
+        "behavior_overrides": {
+          "data_collection_probability": 0.4,
+          "exfiltration_probability": 0.3,
+          "cover_tracks_probability": 0.2,
+          "intelligence_analysis_probability": 0.1
+        },
+        "exfiltration_config": {
+          "data_types": ["documents", "credentials", "source_code", "financial_records"],
+          "exfiltration_methods": ["email", "dns_tunneling", "https_covert"],
+          "data_staging": "encrypted_archives"
+        }
+      }
+    }
+  },
+  
+  "apt_attack_chain": {
+    "phases": [
+      {
+        "name": "reconnaissance",
+        "steps": "1-30",
+        "description": "Target research and intelligence gathering",
+        "activities": [
+          "social_media_profiling",
+          "organizational_mapping",
+          "email_enumeration",
+          "vulnerability_assessment"
+        ],
+        "objectives": [
+          "identify_high_value_targets",
+          "map_organizational_structure",
+          "discover_communication_patterns",
+          "assess_security_posture"
+        ]
+      },
+      
+      {
+        "name": "initial_compromise",
+        "steps": "31-60",
+        "description": "Spear phishing and initial foothold establishment",
+        "activities": [
+          "targeted_spear_phishing",
+          "malicious_attachment_delivery",
+          "credential_harvesting",
+          "initial_beacon_deployment"
+        ],
+        "objectives": [
+          "compromise_initial_targets",
+          "establish_c2_communication",
+          "deploy_persistence_mechanisms",
+          "avoid_detection"
+        ]
+      },
+      
+      {
+        "name": "establishment",
+        "steps": "61-100",
+        "description": "Persistence and privilege escalation",
+        "activities": [
+          "privilege_escalation",
+          "additional_persistence",
+          "credential_dumping",
+          "system_reconnaissance"
+        ],
+        "objectives": [
+          "maintain_persistent_access",
+          "escalate_privileges",
+          "gather_system_intelligence",
+          "prepare_lateral_movement"
+        ]
+      },
+      
+      {
+        "name": "lateral_movement",
+        "steps": "101-140",
+        "description": "Network expansion and additional compromises",
+        "activities": [
+          "credential_reuse_attacks",
+          "network_enumeration",
+          "additional_system_compromise",
+          "domain_privilege_escalation"
+        ],
+        "objectives": [
+          "compromise_additional_systems",
+          "access_high_value_data",
+          "establish_multiple_footholds",
+          "map_network_architecture"
+        ]
+      },
+      
+      {
+        "name": "data_collection",
+        "steps": "141-170",
+        "description": "Data identification and staging",
+        "activities": [
+          "data_discovery",
+          "sensitive_data_identification",
+          "data_staging",
+          "encryption_preparation"
+        ],
+        "objectives": [
+          "locate_valuable_data",
+          "stage_data_for_exfiltration",
+          "maintain_operational_security",
+          "prepare_exfiltration_channels"
+        ]
+      },
+      
+      {
+        "name": "exfiltration",
+        "steps": "171-200",
+        "description": "Data exfiltration and mission completion",
+        "activities": [
+          "covert_data_exfiltration",
+          "cover_tracks",
+          "maintain_access",
+          "intelligence_analysis"
+        ],
+        "objectives": [
+          "exfiltrate_target_data",
+          "avoid_detection",
+          "maintain_future_access",
+          "complete_mission_objectives"
+        ]
+      }
+    ]
+  },
+  
+  "security_policies": {
+    "enforcement_level": "standard",
+    "email_security": {
+      "sender_blocking": {
+        "basic_blocked_senders": [
+          "phishing@attacker.com",
+          "malware@badactor.net"
+        ],
+        "blocked_domains": [
+          "*@known-phishing.com"
+        ]
+      },
+      "ip_blocking": {
+        "blocked_ips": [
+          "203.0.113.50"
+        ],
+        "blocked_subnets": [
+          "198.51.100.0/24"
+        ]
+      },
+      "content_filtering": {
+        "quarantine_keywords": [
+          "urgent wire transfer",
+          "verify your account"
+        ]
+      },
+      "attachment_security": {
+        "blocked_extensions": [".exe", ".scr", ".bat"],
+        "max_attachment_size_mb": 5,
+        "malware_scanning": true
+      }
+    }
+  },
+  
+  "apt_techniques": {
+    "initial_access": [
+      "spear_phishing_attachment",
+      "spear_phishing_link",
+      "supply_chain_compromise",
+      "trusted_relationship"
+    ],
+    
+    "execution": [
+      "user_execution",
+      "scheduled_task",
+      "windows_management_instrumentation",
+      "powershell"
+    ],
+    
+    "persistence": [
+      "registry_run_keys",
+      "scheduled_task",
+      "winlogon_helper_dll",
+      "boot_or_logon_autostart"
+    ],
+    
+    "privilege_escalation": [
+      "process_injection",
+      "access_token_manipulation",
+      "bypass_user_account_control",
+      "exploitation_for_privilege_escalation"
+    ],
+    
+    "defense_evasion": [
+      "obfuscated_files_or_information",
+      "process_injection",
+      "masquerading",
+      "disable_or_modify_tools"
+    ],
+    
+    "credential_access": [
+      "credential_dumping",
+      "input_capture",
+      "network_sniffing",
+      "brute_force"
+    ],
+    
+    "discovery": [
+      "account_discovery",
+      "network_service_scanning",
+      "system_information_discovery",
+      "remote_system_discovery"
+    ],
+    
+    "lateral_movement": [
+      "remote_desktop_protocol",
+      "windows_admin_shares",
+      "pass_the_hash",
+      "remote_services"
+    ],
+    
+    "collection": [
+      "data_from_local_system",
+      "data_from_network_shared_drive",
+      "email_collection",
+      "screen_capture"
+    ],
+    
+    "exfiltration": [
+      "exfiltration_over_c2_channel",
+      "exfiltration_over_alternative_protocol",
+      "data_compressed",
+      "data_encrypted"
+    ]
+  },
+  
+  "monitoring": {
+    "metrics_collection": {
+      "apt_indicators": true,
+      "attack_progression": true,
+      "compromise_timeline": true,
+      "data_access_patterns": true,
+      "defense_effectiveness": true
+    },
+    
+    "alerts": {
+      "initial_compromise": true,
+      "lateral_movement": true,
+      "data_exfiltration": true,
+      "persistence_mechanisms": true
+    },
+    
+    "reporting": {
+      "apt_timeline": true,
+      "compromise_analysis": true,
+      "data_impact_assessment": true,
+      "defense_gaps": true
+    }
+  },
+  
+  "expected_outcomes": {
+    "apt_metrics": {
+      "initial_compromise_success": "60-80%",
+      "lateral_movement_success": "40-60%",
+      "data_exfiltration_success": "30-50%",
+      "detection_rate": "20-40%"
+    },
+    
+    "compromise_timeline": {
+      "time_to_initial_compromise": "30-60 steps",
+      "time_to_lateral_movement": "100-140 steps",
+      "time_to_data_exfiltration": "170-200 steps",
+      "total_dwell_time": "140-170 steps"
+    },
+    
+    "data_impact": {
+      "systems_compromised": "2-4",
+      "data_types_accessed": "3-5",
+      "data_volume_exfiltrated": "high",
+      "business_impact": "severe"
+    },
+    
+    "learning_points": [
+      "APT attack methodology and patience",
+      "Importance of layered defense",
+      "Detection challenges with advanced threats",
+      "Long-term compromise implications"
+    ]
+  },
+  
+  "educational_notes": {
+    "instructor_guidance": [
+      "Emphasize APT patience and stealth",
+      "Highlight detection challenges",
+      "Explain long-term impact",
+      "Discuss advanced defense needs"
+    ],
+    
+    "student_observations": [
+      "Notice slow, methodical progression",
+      "Track compromise expansion",
+      "Observe evasion techniques",
+      "Monitor data exfiltration patterns"
+    ],
+    
+    "discussion_points": [
+      "What makes APTs so dangerous?",
+      "Why are they hard to detect?",
+      "How can organizations defend against APTs?",
+      "What are the long-term implications?"
+    ]
+  }
+}

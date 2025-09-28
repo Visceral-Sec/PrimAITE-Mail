@@ -1,0 +1,537 @@
+{
+  "agent_profiles": {
+    "version": "1.0",
+    "description": "Agent behavior profiles for different scenarios and configurations",
+    "categories": ["green_team", "blue_team", "red_team"],
+    
+    "green_team_profiles": {
+      "alice_marketing_profiles": {
+        "conservative": {
+          "description": "Low-activity marketing manager with security awareness",
+          "behavior_overrides": {
+            "send_probability": 0.5,
+            "retrieve_probability": 0.4,
+            "idle_probability": 0.1,
+            "email_frequency": 8,
+            "attachment_probability": 0.3,
+            "external_communication_ratio": 0.4
+          },
+          "security_characteristics": {
+            "phishing_susceptibility": 0.2,
+            "attachment_caution": 0.8,
+            "external_email_trust": 0.3,
+            "security_awareness": "high"
+          }
+        },
+        
+        "normal": {
+          "description": "Standard marketing manager behavior",
+          "behavior_overrides": {
+            "send_probability": 0.7,
+            "retrieve_probability": 0.2,
+            "idle_probability": 0.1,
+            "email_frequency": 10,
+            "attachment_probability": 0.4,
+            "external_communication_ratio": 0.6
+          },
+          "security_characteristics": {
+            "phishing_susceptibility": 0.3,
+            "attachment_caution": 0.6,
+            "external_email_trust": 0.4,
+            "security_awareness": "medium"
+          }
+        },
+        
+        "aggressive": {
+          "description": "High-activity marketing manager with extensive outreach",
+          "behavior_overrides": {
+            "send_probability": 0.8,
+            "retrieve_probability": 0.15,
+            "idle_probability": 0.05,
+            "email_frequency": 6,
+            "attachment_probability": 0.6,
+            "external_communication_ratio": 0.8
+          },
+          "security_characteristics": {
+            "phishing_susceptibility": 0.4,
+            "attachment_caution": 0.4,
+            "external_email_trust": 0.6,
+            "security_awareness": "low"
+          }
+        }
+      },
+      
+      "bob_developer_profiles": {
+        "security_focused": {
+          "description": "Security-conscious developer with careful email habits",
+          "behavior_overrides": {
+            "send_probability": 0.4,
+            "retrieve_probability": 0.5,
+            "idle_probability": 0.1,
+            "email_frequency": 15,
+            "attachment_probability": 0.5,
+            "code_sharing_ratio": 0.3
+          },
+          "security_characteristics": {
+            "phishing_susceptibility": 0.1,
+            "attachment_caution": 0.9,
+            "external_email_trust": 0.1,
+            "security_awareness": "expert"
+          }
+        },
+        
+        "normal": {
+          "description": "Standard developer behavior",
+          "behavior_overrides": {
+            "send_probability": 0.5,
+            "retrieve_probability": 0.4,
+            "idle_probability": 0.1,
+            "email_frequency": 12,
+            "attachment_probability": 0.6,
+            "code_sharing_ratio": 0.5
+          },
+          "security_characteristics": {
+            "phishing_susceptibility": 0.2,
+            "attachment_caution": 0.7,
+            "external_email_trust": 0.2,
+            "security_awareness": "high"
+          }
+        },
+        
+        "collaborative": {
+          "description": "Highly collaborative developer with frequent external communication",
+          "behavior_overrides": {
+            "send_probability": 0.6,
+            "retrieve_probability": 0.3,
+            "idle_probability": 0.1,
+            "email_frequency": 8,
+            "attachment_probability": 0.8,
+            "code_sharing_ratio": 0.7
+          },
+          "security_characteristics": {
+            "phishing_susceptibility": 0.3,
+            "attachment_caution": 0.5,
+            "external_email_trust": 0.4,
+            "security_awareness": "medium"
+          }
+        }
+      },
+      
+      "charlie_assistant_profiles": {
+        "efficient": {
+          "description": "Highly efficient assistant with streamlined communication",
+          "behavior_overrides": {
+            "send_probability": 0.8,
+            "retrieve_probability": 0.15,
+            "idle_probability": 0.05,
+            "email_frequency": 6,
+            "multi_recipient_probability": 0.7,
+            "document_distribution_ratio": 0.8
+          },
+          "security_characteristics": {
+            "phishing_susceptibility": 0.2,
+            "attachment_caution": 0.7,
+            "external_email_trust": 0.3,
+            "security_awareness": "high"
+          }
+        },
+        
+        "normal": {
+          "description": "Standard executive assistant behavior",
+          "behavior_overrides": {
+            "send_probability": 0.6,
+            "retrieve_probability": 0.3,
+            "idle_probability": 0.1,
+            "email_frequency": 10,
+            "multi_recipient_probability": 0.4,
+            "document_distribution_ratio": 0.5
+          },
+          "security_characteristics": {
+            "phishing_susceptibility": 0.4,
+            "attachment_caution": 0.5,
+            "external_email_trust": 0.6,
+            "security_awareness": "medium"
+          }
+        },
+        
+        "overwhelmed": {
+          "description": "Busy assistant with potential security lapses",
+          "behavior_overrides": {
+            "send_probability": 0.4,
+            "retrieve_probability": 0.5,
+            "idle_probability": 0.1,
+            "email_frequency": 15,
+            "multi_recipient_probability": 0.2,
+            "document_distribution_ratio": 0.3
+          },
+          "security_characteristics": {
+            "phishing_susceptibility": 0.6,
+            "attachment_caution": 0.3,
+            "external_email_trust": 0.7,
+            "security_awareness": "low"
+          }
+        }
+      },
+      
+      "remote_user_profiles": {
+        "cautious": {
+          "description": "Security-aware remote worker",
+          "behavior_overrides": {
+            "send_probability": 0.2,
+            "retrieve_probability": 0.7,
+            "idle_probability": 0.1,
+            "email_frequency": 25,
+            "risky_behavior_probability": 0.05
+          },
+          "security_characteristics": {
+            "phishing_susceptibility": 0.3,
+            "attachment_caution": 0.7,
+            "external_email_trust": 0.3,
+            "security_awareness": "medium"
+          }
+        },
+        
+        "normal": {
+          "description": "Standard remote worker behavior",
+          "behavior_overrides": {
+            "send_probability": 0.3,
+            "retrieve_probability": 0.6,
+            "idle_probability": 0.1,
+            "email_frequency": 20,
+            "risky_behavior_probability": 0.1
+          },
+          "security_characteristics": {
+            "phishing_susceptibility": 0.5,
+            "attachment_caution": 0.4,
+            "external_email_trust": 0.6,
+            "security_awareness": "low"
+          }
+        },
+        
+        "risky": {
+          "description": "High-risk remote worker with poor security habits",
+          "behavior_overrides": {
+            "send_probability": 0.4,
+            "retrieve_probability": 0.5,
+            "idle_probability": 0.1,
+            "email_frequency": 15,
+            "risky_behavior_probability": 0.2
+          },
+          "security_characteristics": {
+            "phishing_susceptibility": 0.8,
+            "attachment_caution": 0.2,
+            "external_email_trust": 0.8,
+            "security_awareness": "very_low"
+          }
+        }
+      }
+    },
+    
+    "blue_team_profiles": {
+      "email_security_analyst_profiles": {
+        "proactive": {
+          "description": "Highly proactive security analyst with aggressive monitoring",
+          "behavior_overrides": {
+            "monitor_probability": 0.6,
+            "policy_update_probability": 0.3,
+            "threat_response_probability": 0.1,
+            "analysis_frequency": 4
+          },
+          "security_configuration": {
+            "threat_detection_sensitivity": "high",
+            "automated_response": true,
+            "proactive_hunting": true,
+            "policy_optimization": "aggressive"
+          }
+        },
+        
+        "balanced": {
+          "description": "Balanced security analyst approach",
+          "behavior_overrides": {
+            "monitor_probability": 0.4,
+            "policy_update_probability": 0.3,
+            "threat_response_probability": 0.25,
+            "analysis_frequency": 6
+          },
+          "security_configuration": {
+            "threat_detection_sensitivity": "medium",
+            "automated_response": true,
+            "proactive_hunting": false,
+            "policy_optimization": "balanced"
+          }
+        },
+        
+        "reactive": {
+          "description": "Reactive security analyst focused on incident response",
+          "behavior_overrides": {
+            "monitor_probability": 0.2,
+            "policy_update_probability": 0.2,
+            "threat_response_probability": 0.55,
+            "analysis_frequency": 10
+          },
+          "security_configuration": {
+            "threat_detection_sensitivity": "low",
+            "automated_response": false,
+            "proactive_hunting": false,
+            "policy_optimization": "conservative"
+          }
+        }
+      },
+      
+      "incident_responder_profiles": {
+        "rapid_response": {
+          "description": "Fast-acting incident responder with quick containment focus",
+          "behavior_overrides": {
+            "investigate_probability": 0.2,
+            "containment_probability": 0.6,
+            "forensics_probability": 0.15,
+            "response_frequency": 3
+          },
+          "response_configuration": {
+            "containment_priority": "immediate",
+            "forensic_depth": "basic",
+            "coordination_level": "minimal"
+          }
+        },
+        
+        "thorough": {
+          "description": "Thorough incident responder with detailed analysis",
+          "behavior_overrides": {
+            "investigate_probability": 0.5,
+            "containment_probability": 0.2,
+            "forensics_probability": 0.25,
+            "response_frequency": 8
+          },
+          "response_configuration": {
+            "containment_priority": "measured",
+            "forensic_depth": "comprehensive",
+            "coordination_level": "extensive"
+          }
+        },
+        
+        "balanced": {
+          "description": "Balanced incident response approach",
+          "behavior_overrides": {
+            "investigate_probability": 0.4,
+            "containment_probability": 0.35,
+            "forensics_probability": 0.2,
+            "response_frequency": 5
+          },
+          "response_configuration": {
+            "containment_priority": "balanced",
+            "forensic_depth": "standard",
+            "coordination_level": "standard"
+          }
+        }
+      }
+    },
+    
+    "red_team_profiles": {
+      "email_phishing_agent_profiles": {
+        "opportunistic": {
+          "description": "Opportunistic attacker with broad, low-sophistication attacks",
+          "behavior_overrides": {
+            "phishing_probability": 0.8,
+            "reconnaissance_probability": 0.1,
+            "payload_delivery_probability": 0.1,
+            "email_frequency": 5
+          },
+          "attack_configuration": {
+            "sophistication_level": "low",
+            "target_selectivity": "broad",
+            "evasion_techniques": "basic",
+            "persistence": "low"
+          }
+        },
+        
+        "targeted": {
+          "description": "Targeted attacker with focused, medium-sophistication attacks",
+          "behavior_overrides": {
+            "phishing_probability": 0.6,
+            "reconnaissance_probability": 0.3,
+            "payload_delivery_probability": 0.1,
+            "email_frequency": 8
+          },
+          "attack_configuration": {
+            "sophistication_level": "medium",
+            "target_selectivity": "focused",
+            "evasion_techniques": "intermediate",
+            "persistence": "medium"
+          }
+        },
+        
+        "advanced_persistent": {
+          "description": "Advanced persistent threat with high sophistication",
+          "behavior_overrides": {
+            "phishing_probability": 0.4,
+            "reconnaissance_probability": 0.4,
+            "payload_delivery_probability": 0.15,
+            "adaptation_probability": 0.05,
+            "email_frequency": 12
+          },
+          "attack_configuration": {
+            "sophistication_level": "high",
+            "target_selectivity": "surgical",
+            "evasion_techniques": "advanced",
+            "persistence": "high"
+          }
+        }
+      },
+      
+      "c2_beacon_profiles": {
+        "noisy": {
+          "description": "High-frequency, easily detectable C2 communication",
+          "behavior_overrides": {
+            "beacon_probability": 0.7,
+            "command_execution_probability": 0.2,
+            "data_exfiltration_probability": 0.1,
+            "beacon_frequency": 5
+          },
+          "c2_configuration": {
+            "stealth_level": "low",
+            "communication_frequency": "high",
+            "encryption_level": "basic"
+          }
+        },
+        
+        "stealthy": {
+          "description": "Low-frequency, hard-to-detect C2 communication",
+          "behavior_overrides": {
+            "beacon_probability": 0.3,
+            "command_execution_probability": 0.4,
+            "data_exfiltration_probability": 0.25,
+            "beacon_frequency": 20
+          },
+          "c2_configuration": {
+            "stealth_level": "high",
+            "communication_frequency": "low",
+            "encryption_level": "advanced"
+          }
+        },
+        
+        "adaptive": {
+          "description": "Adaptive C2 that changes behavior based on detection",
+          "behavior_overrides": {
+            "beacon_probability": 0.4,
+            "command_execution_probability": 0.3,
+            "data_exfiltration_probability": 0.2,
+            "adaptation_probability": 0.1,
+            "beacon_frequency": 15
+          },
+          "c2_configuration": {
+            "stealth_level": "variable",
+            "communication_frequency": "adaptive",
+            "encryption_level": "variable"
+          }
+        }
+      }
+    }
+  },
+  
+  "profile_combinations": {
+    "scenario_presets": {
+      "low_security_awareness": {
+        "description": "Organization with poor security culture",
+        "green_team_profiles": {
+          "alice": "aggressive",
+          "bob": "collaborative",
+          "charlie": "overwhelmed",
+          "remote": "risky"
+        },
+        "expected_outcomes": {
+          "phishing_success_rate": "high",
+          "user_compliance": "low",
+          "security_incidents": "frequent"
+        }
+      },
+      
+      "high_security_awareness": {
+        "description": "Security-conscious organization",
+        "green_team_profiles": {
+          "alice": "conservative",
+          "bob": "security_focused",
+          "charlie": "efficient",
+          "remote": "cautious"
+        },
+        "expected_outcomes": {
+          "phishing_success_rate": "low",
+          "user_compliance": "high",
+          "security_incidents": "rare"
+        }
+      },
+      
+      "mixed_security_culture": {
+        "description": "Organization with varied security awareness",
+        "green_team_profiles": {
+          "alice": "normal",
+          "bob": "security_focused",
+          "charlie": "normal",
+          "remote": "risky"
+        },
+        "expected_outcomes": {
+          "phishing_success_rate": "medium",
+          "user_compliance": "medium",
+          "security_incidents": "occasional"
+        }
+      }
+    },
+    
+    "attack_defense_combinations": {
+      "basic_attacks_vs_proactive_defense": {
+        "red_team_profiles": {
+          "phishing_agent": "opportunistic",
+          "c2_beacon": "noisy"
+        },
+        "blue_team_profiles": {
+          "security_analyst": "proactive",
+          "incident_responder": "rapid_response"
+        },
+        "expected_outcome": "defense_advantage"
+      },
+      
+      "advanced_attacks_vs_reactive_defense": {
+        "red_team_profiles": {
+          "phishing_agent": "advanced_persistent",
+          "c2_beacon": "stealthy"
+        },
+        "blue_team_profiles": {
+          "security_analyst": "reactive",
+          "incident_responder": "thorough"
+        },
+        "expected_outcome": "attack_advantage"
+      },
+      
+      "adaptive_attacks_vs_balanced_defense": {
+        "red_team_profiles": {
+          "phishing_agent": "targeted",
+          "c2_beacon": "adaptive"
+        },
+        "blue_team_profiles": {
+          "security_analyst": "balanced",
+          "incident_responder": "balanced"
+        },
+        "expected_outcome": "contested"
+      }
+    }
+  },
+  
+  "profile_metadata": {
+    "version": "1.0",
+    "created_date": "2025-01-27",
+    "description": "Comprehensive agent behavior profiles for email security scenarios",
+    
+    "usage_guidelines": [
+      "Select profiles based on scenario objectives",
+      "Consider organizational security culture",
+      "Balance realism with educational value",
+      "Adjust profiles for specific learning outcomes"
+    ],
+    
+    "customization_notes": [
+      "Profiles can be mixed and matched",
+      "Behavior overrides can be fine-tuned",
+      "Security characteristics are scenario-dependent",
+      "New profiles can be created by combining existing elements"
+    ]
+  }
+}

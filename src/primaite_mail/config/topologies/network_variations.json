@@ -1,0 +1,749 @@
+{
+  "network_topologies": {
+    "version": "1.0",
+    "description": "Network topology variations for different organizational structures and scenarios",
+    "categories": ["simple", "standard", "complex", "specialized"],
+    
+    "simple_topologies": {
+      "small_office": {
+        "name": "small_office",
+        "description": "Simple single-network topology for small offices",
+        "use_case": "Small businesses with 5-20 employees",
+        "complexity": "minimal",
+        "configuration": {
+          "subnets": {
+            "office": {
+              "network": "192.168.1.0/24",
+              "gateway": "192.168.1.1",
+              "description": "Single office network"
+            }
+          },
+          "nodes": {
+            "mail_server": {
+              "hostname": "mail_server",
+              "ip_address": "192.168.1.10",
+              "subnet": "office",
+              "services": ["smtp-server", "pop3-server"]
+            },
+            "dns_server": {
+              "hostname": "dns_server",
+              "ip_address": "192.168.1.11",
+              "subnet": "office",
+              "services": ["dns-server"]
+            },
+            "alice_workstation": {
+              "hostname": "alice_workstation",
+              "ip_address": "192.168.1.20",
+              "subnet": "office",
+              "applications": ["email-client"]
+            },
+            "bob_workstation": {
+              "hostname": "bob_workstation",
+              "ip_address": "192.168.1.21",
+              "subnet": "office",
+              "applications": ["email-client"]
+            }
+          },
+          "security_features": {
+            "firewalls": 0,
+            "network_segmentation": false,
+            "dmz": false,
+            "external_access": "direct"
+          }
+        },
+        "characteristics": {
+          "setup_complexity": "very_low",
+          "security_level": "basic",
+          "scalability": "limited",
+          "maintenance": "minimal"
+        }
+      },
+      
+      "home_office": {
+        "name": "home_office",
+        "description": "Basic home office setup with internet connection",
+        "use_case": "Remote workers and very small businesses",
+        "complexity": "minimal",
+        "configuration": {
+          "subnets": {
+            "home": {
+              "network": "192.168.0.0/24",
+              "gateway": "192.168.0.1",
+              "description": "Home network"
+            },
+            "internet": {
+              "network": "203.0.113.0/24",
+              "gateway": "203.0.113.1",
+              "description": "Internet connection"
+            }
+          },
+          "nodes": {
+            "home_router": {
+              "hostname": "home_router",
+              "ip_address": "192.168.0.1",
+              "subnet": "home",
+              "type": "router"
+            },
+            "remote_workstation": {
+              "hostname": "remote_workstation",
+              "ip_address": "192.168.0.10",
+              "subnet": "home",
+              "applications": ["email-client"]
+            },
+            "external_mail": {
+              "hostname": "external_mail",
+              "ip_address": "203.0.113.10",
+              "subnet": "internet",
+              "services": ["smtp-server", "pop3-server"]
+            }
+          },
+          "security_features": {
+            "firewalls": 1,
+            "network_segmentation": false,
+            "dmz": false,
+            "external_access": "nat"
+          }
+        },
+        "characteristics": {
+          "setup_complexity": "very_low",
+          "security_level": "minimal",
+          "scalability": "none",
+          "maintenance": "minimal"
+        }
+      }
+    },
+    
+    "standard_topologies": {
+      "enterprise_basic": {
+        "name": "enterprise_basic",
+        "description": "Standard enterprise topology with DMZ and internal networks",
+        "use_case": "Medium-sized businesses with 50-200 employees",
+        "complexity": "moderate",
+        "configuration": {
+          "subnets": {
+            "internet": {
+              "network": "203.0.113.0/24",
+              "gateway": "203.0.113.1",
+              "description": "External Internet network"
+            },
+            "dmz": {
+              "network": "192.168.100.0/24",
+              "gateway": "192.168.100.1",
+              "description": "DMZ network for public services"
+            },
+            "corporate": {
+              "network": "192.168.1.0/24",
+              "gateway": "192.168.1.1",
+              "description": "Corporate internal network"
+            }
+          },
+          "nodes": {
+            "dmz_firewall": {
+              "hostname": "dmz_firewall",
+              "type": "firewall",
+              "ip_address": "192.168.100.1",
+              "subnet": "dmz"
+            },
+            "corporate_firewall": {
+              "hostname": "corporate_firewall",
+              "type": "firewall",
+              "ip_address": "192.168.1.1",
+              "subnet": "corporate"
+            },
+            "mail_server": {
+              "hostname": "mail_server",
+              "ip_address": "192.168.100.10",
+              "subnet": "dmz",
+              "services": ["smtp-server", "pop3-server"]
+            },
+            "dns_server": {
+              "hostname": "dns_server",
+              "ip_address": "192.168.100.20",
+              "subnet": "dmz",
+              "services": ["dns-server"]
+            },
+            "alice_workstation": {
+              "hostname": "alice_workstation",
+              "ip_address": "192.168.1.20",
+              "subnet": "corporate",
+              "applications": ["email-client"]
+            },
+            "bob_workstation": {
+              "hostname": "bob_workstation",
+              "ip_address": "192.168.1.30",
+              "subnet": "corporate",
+              "applications": ["email-client"]
+            },
+            "security_workstation": {
+              "hostname": "security_workstation",
+              "ip_address": "192.168.1.10",
+              "subnet": "corporate",
+              "applications": ["email-client"]
+            }
+          },
+          "security_features": {
+            "firewalls": 2,
+            "network_segmentation": true,
+            "dmz": true,
+            "external_access": "controlled"
+          }
+        },
+        "characteristics": {
+          "setup_complexity": "moderate",
+          "security_level": "good",
+          "scalability": "good",
+          "maintenance": "moderate"
+        }
+      },
+      
+      "multi_site": {
+        "name": "multi_site",
+        "description": "Multi-site topology with headquarters and branch offices",
+        "use_case": "Organizations with multiple locations",
+        "complexity": "moderate",
+        "configuration": {
+          "subnets": {
+            "internet": {
+              "network": "203.0.113.0/24",
+              "gateway": "203.0.113.1",
+              "description": "External Internet network"
+            },
+            "hq_dmz": {
+              "network": "192.168.100.0/24",
+              "gateway": "192.168.100.1",
+              "description": "Headquarters DMZ"
+            },
+            "hq_corporate": {
+              "network": "192.168.1.0/24",
+              "gateway": "192.168.1.1",
+              "description": "Headquarters corporate network"
+            },
+            "branch_office": {
+              "network": "192.168.50.0/24",
+              "gateway": "192.168.50.1",
+              "description": "Branch office network"
+            },
+            "remote_office": {
+              "network": "192.168.60.0/24",
+              "gateway": "192.168.60.1",
+              "description": "Remote office network"
+            }
+          },
+          "nodes": {
+            "hq_mail_server": {
+              "hostname": "hq_mail_server",
+              "ip_address": "192.168.100.10",
+              "subnet": "hq_dmz",
+              "services": ["smtp-server", "pop3-server"]
+            },
+            "hq_dns_server": {
+              "hostname": "hq_dns_server",
+              "ip_address": "192.168.100.20",
+              "subnet": "hq_dmz",
+              "services": ["dns-server"]
+            },
+            "alice_hq": {
+              "hostname": "alice_hq",
+              "ip_address": "192.168.1.20",
+              "subnet": "hq_corporate",
+              "applications": ["email-client"]
+            },
+            "bob_branch": {
+              "hostname": "bob_branch",
+              "ip_address": "192.168.50.10",
+              "subnet": "branch_office",
+              "applications": ["email-client"]
+            },
+            "charlie_remote": {
+              "hostname": "charlie_remote",
+              "ip_address": "192.168.60.10",
+              "subnet": "remote_office",
+              "applications": ["email-client"]
+            }
+          },
+          "security_features": {
+            "firewalls": 4,
+            "network_segmentation": true,
+            "dmz": true,
+            "external_access": "vpn_tunnels"
+          }
+        },
+        "characteristics": {
+          "setup_complexity": "high",
+          "security_level": "good",
+          "scalability": "excellent",
+          "maintenance": "high"
+        }
+      }
+    },
+    
+    "complex_topologies": {
+      "enterprise_advanced": {
+        "name": "enterprise_advanced",
+        "description": "Advanced enterprise topology with multiple security zones",
+        "use_case": "Large enterprises with complex security requirements",
+        "complexity": "high",
+        "configuration": {
+          "subnets": {
+            "internet": {
+              "network": "203.0.113.0/24",
+              "gateway": "203.0.113.1",
+              "description": "External Internet network"
+            },
+            "external_dmz": {
+              "network": "192.168.100.0/24",
+              "gateway": "192.168.100.1",
+              "description": "External-facing DMZ"
+            },
+            "internal_dmz": {
+              "network": "192.168.101.0/24",
+              "gateway": "192.168.101.1",
+              "description": "Internal services DMZ"
+            },
+            "corporate": {
+              "network": "192.168.1.0/24",
+              "gateway": "192.168.1.1",
+              "description": "Corporate user network"
+            },
+            "management": {
+              "network": "192.168.10.0/24",
+              "gateway": "192.168.10.1",
+              "description": "Management and security network"
+            },
+            "guest": {
+              "network": "192.168.200.0/24",
+              "gateway": "192.168.200.1",
+              "description": "Guest network"
+            },
+            "remote_access": {
+              "network": "192.168.50.0/24",
+              "gateway": "192.168.50.1",
+              "description": "VPN and remote access"
+            }
+          },
+          "nodes": {
+            "external_firewall": {
+              "hostname": "external_firewall",
+              "type": "firewall",
+              "ip_address": "192.168.100.1",
+              "subnet": "external_dmz"
+            },
+            "internal_firewall": {
+              "hostname": "internal_firewall",
+              "type": "firewall",
+              "ip_address": "192.168.101.1",
+              "subnet": "internal_dmz"
+            },
+            "corporate_firewall": {
+              "hostname": "corporate_firewall",
+              "type": "firewall",
+              "ip_address": "192.168.1.1",
+              "subnet": "corporate"
+            },
+            "mail_server_primary": {
+              "hostname": "mail_server_primary",
+              "ip_address": "192.168.100.10",
+              "subnet": "external_dmz",
+              "services": ["smtp-server"]
+            },
+            "mail_server_internal": {
+              "hostname": "mail_server_internal",
+              "ip_address": "192.168.101.10",
+              "subnet": "internal_dmz",
+              "services": ["pop3-server", "imap-server"]
+            },
+            "dns_server_primary": {
+              "hostname": "dns_server_primary",
+              "ip_address": "192.168.100.20",
+              "subnet": "external_dmz",
+              "services": ["dns-server"]
+            },
+            "dns_server_internal": {
+              "hostname": "dns_server_internal",
+              "ip_address": "192.168.101.20",
+              "subnet": "internal_dmz",
+              "services": ["dns-server"]
+            },
+            "security_operations_center": {
+              "hostname": "security_operations_center",
+              "ip_address": "192.168.10.10",
+              "subnet": "management",
+              "applications": ["security-monitoring", "email-client"]
+            },
+            "alice_executive": {
+              "hostname": "alice_executive",
+              "ip_address": "192.168.1.20",
+              "subnet": "corporate",
+              "applications": ["email-client"]
+            },
+            "bob_developer": {
+              "hostname": "bob_developer",
+              "ip_address": "192.168.1.30",
+              "subnet": "corporate",
+              "applications": ["email-client"]
+            },
+            "charlie_admin": {
+              "hostname": "charlie_admin",
+              "ip_address": "192.168.1.40",
+              "subnet": "corporate",
+              "applications": ["email-client"]
+            },
+            "remote_worker": {
+              "hostname": "remote_worker",
+              "ip_address": "192.168.50.10",
+              "subnet": "remote_access",
+              "applications": ["email-client"]
+            }
+          },
+          "security_features": {
+            "firewalls": 5,
+            "network_segmentation": true,
+            "dmz": true,
+            "ids_ips": true,
+            "network_monitoring": true,
+            "external_access": "multiple_vpn_types"
+          }
+        },
+        "characteristics": {
+          "setup_complexity": "very_high",
+          "security_level": "excellent",
+          "scalability": "excellent",
+          "maintenance": "very_high"
+        }
+      },
+      
+      "zero_trust": {
+        "name": "zero_trust",
+        "description": "Zero-trust network architecture with micro-segmentation",
+        "use_case": "High-security organizations implementing zero-trust principles",
+        "complexity": "very_high",
+        "configuration": {
+          "subnets": {
+            "internet": {
+              "network": "203.0.113.0/24",
+              "gateway": "203.0.113.1",
+              "description": "External Internet network"
+            },
+            "edge_security": {
+              "network": "192.168.90.0/24",
+              "gateway": "192.168.90.1",
+              "description": "Edge security and inspection zone"
+            },
+            "email_services": {
+              "network": "192.168.100.0/28",
+              "gateway": "192.168.100.1",
+              "description": "Isolated email services segment"
+            },
+            "dns_services": {
+              "network": "192.168.100.16/28",
+              "gateway": "192.168.100.17",
+              "description": "Isolated DNS services segment"
+            },
+            "user_segment_1": {
+              "network": "192.168.1.0/26",
+              "gateway": "192.168.1.1",
+              "description": "User segment 1 (executives)"
+            },
+            "user_segment_2": {
+              "network": "192.168.1.64/26",
+              "gateway": "192.168.1.65",
+              "description": "User segment 2 (developers)"
+            },
+            "user_segment_3": {
+              "network": "192.168.1.128/26",
+              "gateway": "192.168.1.129",
+              "description": "User segment 3 (general staff)"
+            },
+            "security_segment": {
+              "network": "192.168.10.0/28",
+              "gateway": "192.168.10.1",
+              "description": "Security operations segment"
+            },
+            "remote_access": {
+              "network": "192.168.50.0/24",
+              "gateway": "192.168.50.1",
+              "description": "Remote access segment"
+            }
+          },
+          "nodes": {
+            "zero_trust_gateway": {
+              "hostname": "zero_trust_gateway",
+              "type": "security_gateway",
+              "ip_address": "192.168.90.1",
+              "subnet": "edge_security"
+            },
+            "mail_server": {
+              "hostname": "mail_server",
+              "ip_address": "192.168.100.10",
+              "subnet": "email_services",
+              "services": ["smtp-server", "pop3-server"]
+            },
+            "dns_server": {
+              "hostname": "dns_server",
+              "ip_address": "192.168.100.20",
+              "subnet": "dns_services",
+              "services": ["dns-server"]
+            },
+            "alice_executive": {
+              "hostname": "alice_executive",
+              "ip_address": "192.168.1.10",
+              "subnet": "user_segment_1",
+              "applications": ["email-client"]
+            },
+            "bob_developer": {
+              "hostname": "bob_developer",
+              "ip_address": "192.168.1.70",
+              "subnet": "user_segment_2",
+              "applications": ["email-client"]
+            },
+            "charlie_staff": {
+              "hostname": "charlie_staff",
+              "ip_address": "192.168.1.130",
+              "subnet": "user_segment_3",
+              "applications": ["email-client"]
+            },
+            "security_analyst": {
+              "hostname": "security_analyst",
+              "ip_address": "192.168.10.10",
+              "subnet": "security_segment",
+              "applications": ["security-monitoring", "email-client"]
+            },
+            "remote_worker": {
+              "hostname": "remote_worker",
+              "ip_address": "192.168.50.10",
+              "subnet": "remote_access",
+              "applications": ["email-client"]
+            }
+          },
+          "security_features": {
+            "firewalls": 8,
+            "network_segmentation": true,
+            "micro_segmentation": true,
+            "zero_trust_policies": true,
+            "continuous_monitoring": true,
+            "identity_verification": true,
+            "external_access": "zero_trust_vpn"
+          }
+        },
+        "characteristics": {
+          "setup_complexity": "extreme",
+          "security_level": "maximum",
+          "scalability": "complex",
+          "maintenance": "extreme"
+        }
+      }
+    },
+    
+    "specialized_topologies": {
+      "cloud_hybrid": {
+        "name": "cloud_hybrid",
+        "description": "Hybrid cloud topology with on-premises and cloud components",
+        "use_case": "Organizations using hybrid cloud email solutions",
+        "complexity": "high",
+        "configuration": {
+          "subnets": {
+            "internet": {
+              "network": "203.0.113.0/24",
+              "gateway": "203.0.113.1",
+              "description": "External Internet network"
+            },
+            "cloud_services": {
+              "network": "198.51.100.0/24",
+              "gateway": "198.51.100.1",
+              "description": "Cloud service provider network"
+            },
+            "on_premises_dmz": {
+              "network": "192.168.100.0/24",
+              "gateway": "192.168.100.1",
+              "description": "On-premises DMZ"
+            },
+            "corporate": {
+              "network": "192.168.1.0/24",
+              "gateway": "192.168.1.1",
+              "description": "Corporate internal network"
+            },
+            "cloud_connector": {
+              "network": "192.168.80.0/24",
+              "gateway": "192.168.80.1",
+              "description": "Cloud connectivity segment"
+            }
+          },
+          "nodes": {
+            "cloud_mail_service": {
+              "hostname": "cloud_mail_service",
+              "ip_address": "198.51.100.10",
+              "subnet": "cloud_services",
+              "services": ["cloud-smtp", "cloud-pop3"]
+            },
+            "on_premises_relay": {
+              "hostname": "on_premises_relay",
+              "ip_address": "192.168.100.10",
+              "subnet": "on_premises_dmz",
+              "services": ["smtp-relay"]
+            },
+            "cloud_connector": {
+              "hostname": "cloud_connector",
+              "ip_address": "192.168.80.10",
+              "subnet": "cloud_connector",
+              "services": ["vpn-gateway", "cloud-proxy"]
+            },
+            "alice_workstation": {
+              "hostname": "alice_workstation",
+              "ip_address": "192.168.1.20",
+              "subnet": "corporate",
+              "applications": ["email-client"]
+            },
+            "bob_workstation": {
+              "hostname": "bob_workstation",
+              "ip_address": "192.168.1.30",
+              "subnet": "corporate",
+              "applications": ["email-client"]
+            }
+          },
+          "security_features": {
+            "firewalls": 3,
+            "network_segmentation": true,
+            "cloud_security_gateway": true,
+            "encrypted_tunnels": true,
+            "external_access": "cloud_hybrid"
+          }
+        },
+        "characteristics": {
+          "setup_complexity": "high",
+          "security_level": "good",
+          "scalability": "excellent",
+          "maintenance": "moderate"
+        }
+      },
+      
+      "air_gapped": {
+        "name": "air_gapped",
+        "description": "Air-gapped network with no external connectivity",
+        "use_case": "High-security environments requiring complete isolation",
+        "complexity": "moderate",
+        "configuration": {
+          "subnets": {
+            "secure_network": {
+              "network": "10.0.0.0/16",
+              "gateway": "10.0.0.1",
+              "description": "Isolated secure network"
+            },
+            "admin_network": {
+              "network": "10.1.0.0/24",
+              "gateway": "10.1.0.1",
+              "description": "Administrative network"
+            }
+          },
+          "nodes": {
+            "internal_mail_server": {
+              "hostname": "internal_mail_server",
+              "ip_address": "10.0.1.10",
+              "subnet": "secure_network",
+              "services": ["smtp-server", "pop3-server"]
+            },
+            "internal_dns_server": {
+              "hostname": "internal_dns_server",
+              "ip_address": "10.0.1.20",
+              "subnet": "secure_network",
+              "services": ["dns-server"]
+            },
+            "alice_secure": {
+              "hostname": "alice_secure",
+              "ip_address": "10.0.2.10",
+              "subnet": "secure_network",
+              "applications": ["email-client"]
+            },
+            "bob_secure": {
+              "hostname": "bob_secure",
+              "ip_address": "10.0.2.20",
+              "subnet": "secure_network",
+              "applications": ["email-client"]
+            },
+            "admin_workstation": {
+              "hostname": "admin_workstation",
+              "ip_address": "10.1.0.10",
+              "subnet": "admin_network",
+              "applications": ["email-client", "admin-tools"]
+            }
+          },
+          "security_features": {
+            "firewalls": 1,
+            "network_segmentation": true,
+            "air_gapped": true,
+            "physical_isolation": true,
+            "external_access": "none"
+          }
+        },
+        "characteristics": {
+          "setup_complexity": "moderate",
+          "security_level": "maximum",
+          "scalability": "limited",
+          "maintenance": "high"
+        }
+      }
+    }
+  },
+  
+  "topology_comparison": {
+    "complexity_levels": {
+      "minimal": {
+        "topologies": ["small_office", "home_office"],
+        "characteristics": {
+          "setup_time": "1-2 hours",
+          "nodes": "2-5",
+          "subnets": "1-2",
+          "firewalls": "0-1"
+        }
+      },
+      "moderate": {
+        "topologies": ["enterprise_basic", "multi_site", "air_gapped"],
+        "characteristics": {
+          "setup_time": "4-8 hours",
+          "nodes": "5-15",
+          "subnets": "3-7",
+          "firewalls": "2-4"
+        }
+      },
+      "high": {
+        "topologies": ["enterprise_advanced", "cloud_hybrid"],
+        "characteristics": {
+          "setup_time": "1-2 days",
+          "nodes": "10-20",
+          "subnets": "5-10",
+          "firewalls": "3-5"
+        }
+      },
+      "very_high": {
+        "topologies": ["zero_trust"],
+        "characteristics": {
+          "setup_time": "3-5 days",
+          "nodes": "15-30",
+          "subnets": "8-15",
+          "firewalls": "5-10"
+        }
+      }
+    }
+  },
+  
+  "topology_metadata": {
+    "version": "1.0",
+    "created_date": "2025-01-27",
+    "description": "Network topology variations for different organizational needs and scenarios",
+    
+    "selection_guidelines": [
+      "Consider organizational size and complexity",
+      "Evaluate security requirements",
+      "Assess technical expertise available",
+      "Consider budget and resource constraints",
+      "Plan for future growth and changes"
+    ],
+    
+    "customization_notes": [
+      "Topologies can be modified for specific needs",
+      "IP addressing can be adjusted",
+      "Additional security zones can be added",
+      "Service placement can be optimized",
+      "Firewall rules should be customized"
+    ]
+  }
+}

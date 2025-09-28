@@ -1,0 +1,66 @@
+# Security policy testing configuration
+# Pre-configured with various security policies for testing defensive capabilities
+
+simulation:
+  network:
+    nodes:
+      secure_mail_server:
+        hostname: "secure_mail_server"
+        type: "computer"
+        ip_address: "192.168.1.10"
+        default_gateway: "192.168.1.1"
+        services:
+          - type: "smtp-server"
+            domain: "securecompany.com"
+            max_message_size: 2097152  # 2MB - restrictive for testing
+            require_auth: false
+            # Comprehensive security policies
+            blocked_senders:
+              - "phishing@attacker.com"
+              - "malware@badactor.net"
+              - "spam@unwanted.org"
+              - "scam@fraudulent.com"
+              - "virus@infected.net"
+            blocked_ips:
+              - "203.0.113.50"      # Single malicious IP
+              - "198.51.100.0/24"   # Malicious subnet
+              - "192.0.2.0/24"      # Test network
+              - "10.0.0.100"        # Internal threat
+            enable_security_logging: true
+            attachment_restrictions:
+              max_attachment_size: 1048576  # 1MB
+              blocked_extensions:
+                - ".exe"
+                - ".bat"
+                - ".scr"
+                - ".com"
+                - ".pif"
+      
+      test_client:
+        hostname: "test_client"
+        type: "computer"
+        ip_address: "192.168.1.20"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "testuser@securecompany.com"
+            default_smtp_server: "192.168.1.10"
+            auto_start: true
+
+      blocked_client:
+        hostname: "blocked_client"
+        type: "computer"
+        ip_address: "203.0.113.50"  # This IP is blocked
+        default_gateway: "203.0.113.1"
+        applications:
+          - type: "email-client"
+            username: "blocked@attacker.com"
+            default_smtp_server: "192.168.1.10"
+            auto_start: true
+
+# This configuration provides:
+# 1. Restrictive security policies for testing
+# 2. Pre-blocked senders and IPs
+# 3. Attachment size and type restrictions
+# 4. Test clients including blocked ones
+# 5. Comprehensive security logging

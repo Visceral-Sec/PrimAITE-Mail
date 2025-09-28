@@ -1,0 +1,167 @@
+{
+  "name": "phishing_campaign",
+  "description": "Phishing campaign scenario demonstrating targeted attacks with malicious attachments",
+  "duration_steps": 100,
+  "learning_objectives": [
+    "Understand phishing attack vectors and techniques",
+    "Observe user susceptibility patterns",
+    "Learn to identify malicious email characteristics",
+    "Analyze attack progression and impact"
+  ],
+  "network_config": "comprehensive_email_topology.yaml",
+  "agent_configs": {
+    "alice": {
+      "behavior_patterns": {
+        "send_probability": 0.2,
+        "retrieve_probability": 0.4,
+        "attachment_probability": 0.15,
+        "susceptibility": 0.3
+      }
+    },
+    "bob": {
+      "behavior_patterns": {
+        "send_probability": 0.15,
+        "retrieve_probability": 0.5,
+        "attachment_probability": 0.1,
+        "susceptibility": 0.1
+      }
+    },
+    "charlie": {
+      "behavior_patterns": {
+        "send_probability": 0.3,
+        "retrieve_probability": 0.3,
+        "attachment_probability": 0.2,
+        "susceptibility": 0.4
+      }
+    },
+    "remote_user": {
+      "behavior_patterns": {
+        "send_probability": 0.1,
+        "retrieve_probability": 0.2,
+        "attachment_probability": 0.05,
+        "susceptibility": 0.6
+      }
+    },
+    "phishing_agent": {
+      "behavior_patterns": {
+        "campaign_frequency": 0.2,
+        "target_selection": "random",
+        "attachment_malware_rate": 0.8,
+        "domain_spoofing": true
+      }
+    }
+  },
+  "security_policies": {
+    "blocked_senders": [],
+    "blocked_ips": [],
+    "attachment_restrictions": {
+      "max_size_mb": 25,
+      "allowed_types": [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt"],
+      "scan_enabled": true
+    }
+  },
+  "steps": [
+    {
+      "step_number": 0,
+      "description": "Initialize scenario with normal operations",
+      "agents_to_act": ["alice", "bob", "charlie", "remote_user"],
+      "pause_after": true,
+      "analysis_points": [
+        "Establish baseline email activity",
+        "Verify all systems operational",
+        "Check security monitoring status"
+      ],
+      "expected_outcomes": [
+        "Normal email traffic established",
+        "All security systems active",
+        "Clean security logs"
+      ]
+    },
+    {
+      "step_number": 15,
+      "description": "First phishing wave - reconnaissance",
+      "agents_to_act": ["phishing_agent"],
+      "pause_after": true,
+      "analysis_points": [
+        "Identify phishing email characteristics",
+        "Monitor target selection patterns",
+        "Check initial security response"
+      ],
+      "expected_outcomes": [
+        "Phishing emails sent to targets",
+        "Security systems detect suspicious activity",
+        "Initial threat indicators generated"
+      ],
+      "error_recovery": "retry"
+    },
+    {
+      "step_number": 30,
+      "description": "User interaction with phishing emails",
+      "agents_to_act": ["alice", "charlie", "remote_user"],
+      "pause_after": true,
+      "analysis_points": [
+        "Analyze user response to phishing attempts",
+        "Monitor attachment interaction patterns",
+        "Check for successful compromises"
+      ],
+      "expected_outcomes": [
+        "Some users interact with phishing emails",
+        "Malicious attachments downloaded",
+        "Security alerts triggered"
+      ],
+      "error_recovery": "skip"
+    },
+    {
+      "step_number": 50,
+      "description": "Escalated phishing campaign",
+      "agents_to_act": ["phishing_agent"],
+      "pause_after": true,
+      "analysis_points": [
+        "Observe advanced phishing techniques",
+        "Monitor domain spoofing attempts",
+        "Check security system adaptation"
+      ],
+      "expected_outcomes": [
+        "More sophisticated phishing emails",
+        "Increased attack volume",
+        "Enhanced security responses"
+      ],
+      "error_recovery": "retry"
+    },
+    {
+      "step_number": 75,
+      "description": "Impact assessment and containment",
+      "agents_to_act": ["alice", "bob", "charlie", "remote_user"],
+      "pause_after": true,
+      "analysis_points": [
+        "Assess compromise impact",
+        "Monitor lateral movement attempts",
+        "Check containment effectiveness"
+      ],
+      "expected_outcomes": [
+        "Compromised systems identified",
+        "Containment measures activated",
+        "Attack progression limited"
+      ],
+      "error_recovery": "reset_to_checkpoint"
+    },
+    {
+      "step_number": 90,
+      "description": "Final attack wave and analysis",
+      "agents_to_act": ["phishing_agent"],
+      "pause_after": false,
+      "analysis_points": [
+        "Analyze complete attack chain",
+        "Review defense effectiveness",
+        "Document lessons learned"
+      ],
+      "expected_outcomes": [
+        "Complete attack timeline documented",
+        "Defense gaps identified",
+        "Improvement recommendations generated"
+      ]
+    }
+  ],
+  "analysis_checkpoints": [0, 15, 30, 50, 75, 90, 99],
+  "reset_points": [25, 50, 75]
+}

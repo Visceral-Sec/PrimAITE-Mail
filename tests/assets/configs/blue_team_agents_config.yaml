@@ -1,0 +1,129 @@
+# © Crown-owned copyright 2025, Defence Science and Technology Laboratory UK
+# Blue team agents configuration for testing and demonstration
+
+# Network topology
+network:
+  type: network
+  nodes:
+    # Mail server in DMZ
+    mail_server:
+      type: computer
+      hostname: mail_server
+      ip_address: 192.168.100.10
+      subnet_mask: 255.255.255.0
+      start_up_duration: 0
+      software:
+        smtp-server:
+          type: smtp-server
+          domain: enterprise.com
+          max_message_size: 10485760
+          require_auth: false
+          blocked_senders:
+            - spam@malicious.com
+            - phishing@evil.net
+          blocked_ips:
+            - 203.0.113.10
+            - 192.168.200.0/24
+          enable_security_logging: true
+        pop3-server:
+          type: pop3-server
+          domain: enterprise.com
+          require_auth: false
+    
+    # Blue team workstations
+    security_analyst_workstation:
+      type: computer
+      hostname: security_analyst_workstation
+      ip_address: 192.168.1.10
+      subnet_mask: 255.255.255.0
+      start_up_duration: 0
+      software:
+        email-client:
+          type: email-client
+          smtp_server: 192.168.100.10
+          pop3_server: 192.168.100.10
+          username: analyst@enterprise.com
+          password: ""
+    
+    incident_response_workstation:
+      type: computer
+      hostname: incident_response_workstation
+      ip_address: 192.168.1.20
+      subnet_mask: 255.255.255.0
+      start_up_duration: 0
+      software:
+        email-client:
+          type: email-client
+          smtp_server: 192.168.100.10
+          pop3_server: 192.168.100.10
+          username: responder@enterprise.com
+          password: ""
+    
+    blue_team_command_center:
+      type: computer
+      hostname: blue_team_command_center
+      ip_address: 192.168.1.30
+      subnet_mask: 255.255.255.0
+      start_up_duration: 0
+      software:
+        email-client:
+          type: email-client
+          smtp_server: 192.168.100.10
+          pop3_server: 192.168.100.10
+          username: coordinator@enterprise.com
+          password: ""
+
+# Game configuration
+game:
+  type: game
+  agents:
+    # Blue team agents
+    email_security_analyst:
+      type: email-security-analyst-agent
+      ref: email_security_analyst
+      agent_settings:
+        node_name: security_analyst_workstation
+        smtp_server_node: mail_server
+        monitor_probability: 0.4
+        policy_update_probability: 0.3
+        threat_response_probability: 0.25
+        idle_probability: 0.05
+        analysis_frequency: 6
+        analysis_variance: 2
+    
+    incident_responder:
+      type: incident-response-agent
+      ref: incident_responder
+      agent_settings:
+        node_name: incident_response_workstation
+        smtp_server_node: mail_server
+        investigate_probability: 0.4
+        containment_probability: 0.35
+        forensics_probability: 0.2
+        idle_probability: 0.05
+        response_frequency: 5
+        response_variance: 2
+    
+    blue_coordinator:
+      type: blue-team-coordinator
+      ref: blue_coordinator
+      agent_settings:
+        node_name: blue_team_command_center
+        smtp_server_node: mail_server
+        coordination_probability: 0.3
+        strategic_planning_probability: 0.25
+        metrics_analysis_probability: 0.25
+        threat_assessment_probability: 0.15
+        idle_probability: 0.05
+        coordination_frequency: 8
+        coordination_variance: 3
+
+# Session configuration
+session:
+  type: session
+  max_steps: 50
+  render_mode: null
+  output_dir: sessions
+  save_observations: false
+  save_actions: true
+  save_rewards: true

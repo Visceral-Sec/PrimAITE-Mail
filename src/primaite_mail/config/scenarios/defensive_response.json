@@ -1,0 +1,228 @@
+{
+  "name": "defensive_response",
+  "description": "Comprehensive defensive response scenario with blue team threat detection and mitigation",
+  "duration_steps": 150,
+  "learning_objectives": [
+    "Master email security defense techniques",
+    "Learn threat detection and response workflows",
+    "Understand security policy effectiveness",
+    "Practice incident response procedures"
+  ],
+  "network_config": "comprehensive_email_topology.yaml",
+  "agent_configs": {
+    "alice": {
+      "behavior_patterns": {
+        "send_probability": 0.2,
+        "retrieve_probability": 0.4,
+        "attachment_probability": 0.15,
+        "susceptibility": 0.3
+      }
+    },
+    "bob": {
+      "behavior_patterns": {
+        "send_probability": 0.15,
+        "retrieve_probability": 0.5,
+        "attachment_probability": 0.1,
+        "susceptibility": 0.1
+      }
+    },
+    "charlie": {
+      "behavior_patterns": {
+        "send_probability": 0.3,
+        "retrieve_probability": 0.3,
+        "attachment_probability": 0.2,
+        "susceptibility": 0.4
+      }
+    },
+    "remote_user": {
+      "behavior_patterns": {
+        "send_probability": 0.1,
+        "retrieve_probability": 0.2,
+        "attachment_probability": 0.05,
+        "susceptibility": 0.6
+      }
+    },
+    "phishing_agent": {
+      "behavior_patterns": {
+        "campaign_frequency": 0.25,
+        "target_selection": "strategic",
+        "attachment_malware_rate": 0.9,
+        "domain_spoofing": true,
+        "evasion_techniques": true
+      }
+    },
+    "email_security_analyst": {
+      "behavior_patterns": {
+        "monitoring_frequency": 0.8,
+        "threat_detection_threshold": 0.6,
+        "response_speed": 0.9,
+        "policy_update_frequency": 0.3
+      }
+    },
+    "incident_response_agent": {
+      "behavior_patterns": {
+        "investigation_depth": 0.8,
+        "containment_speed": 0.9,
+        "forensic_analysis": true,
+        "coordination_efficiency": 0.8
+      }
+    }
+  },
+  "security_policies": {
+    "blocked_senders": [
+      "suspicious@malicious-domain.com",
+      "phishing@fake-bank.net"
+    ],
+    "blocked_ips": [
+      "203.0.113.50",
+      "198.51.100.75"
+    ],
+    "attachment_restrictions": {
+      "max_size_mb": 20,
+      "allowed_types": [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt"],
+      "scan_enabled": true,
+      "quarantine_suspicious": true
+    },
+    "monitoring_rules": {
+      "suspicious_keywords": ["urgent", "verify account", "click here", "suspended"],
+      "attachment_analysis": true,
+      "sender_reputation": true
+    }
+  },
+  "steps": [
+    {
+      "step_number": 0,
+      "description": "Initialize defensive posture",
+      "agents_to_act": ["email_security_analyst"],
+      "pause_after": true,
+      "analysis_points": [
+        "Verify security policies are active",
+        "Check monitoring systems status",
+        "Confirm blue team readiness"
+      ],
+      "expected_outcomes": [
+        "All security policies deployed",
+        "Monitoring systems operational",
+        "Blue team agents ready"
+      ]
+    },
+    {
+      "step_number": 20,
+      "description": "Initial threat detection phase",
+      "agents_to_act": ["phishing_agent", "email_security_analyst"],
+      "pause_after": true,
+      "analysis_points": [
+        "Monitor threat detection capabilities",
+        "Analyze security alert generation",
+        "Check response time metrics"
+      ],
+      "expected_outcomes": [
+        "Threats detected by security systems",
+        "Appropriate alerts generated",
+        "Fast response times achieved"
+      ],
+      "error_recovery": "retry"
+    },
+    {
+      "step_number": 40,
+      "description": "Active defense implementation",
+      "agents_to_act": ["email_security_analyst", "incident_response_agent"],
+      "pause_after": true,
+      "analysis_points": [
+        "Review blocking effectiveness",
+        "Monitor quarantine operations",
+        "Check policy adaptation"
+      ],
+      "expected_outcomes": [
+        "Malicious emails blocked",
+        "Suspicious content quarantined",
+        "Security policies updated"
+      ],
+      "error_recovery": "skip"
+    },
+    {
+      "step_number": 60,
+      "description": "Escalated attack scenario",
+      "agents_to_act": ["phishing_agent"],
+      "pause_after": true,
+      "analysis_points": [
+        "Test defense against advanced attacks",
+        "Monitor evasion attempt detection",
+        "Check adaptive response capabilities"
+      ],
+      "expected_outcomes": [
+        "Advanced attacks detected",
+        "Evasion attempts blocked",
+        "Defenses adapt to new threats"
+      ],
+      "error_recovery": "reset_to_checkpoint"
+    },
+    {
+      "step_number": 80,
+      "description": "Incident response coordination",
+      "agents_to_act": ["email_security_analyst", "incident_response_agent"],
+      "pause_after": true,
+      "analysis_points": [
+        "Analyze multi-agent coordination",
+        "Review incident response workflow",
+        "Check forensic data collection"
+      ],
+      "expected_outcomes": [
+        "Effective agent coordination",
+        "Complete incident response",
+        "Comprehensive forensic data"
+      ],
+      "error_recovery": "retry"
+    },
+    {
+      "step_number": 100,
+      "description": "User interaction under protection",
+      "agents_to_act": ["alice", "bob", "charlie", "remote_user"],
+      "pause_after": true,
+      "analysis_points": [
+        "Monitor protected user behavior",
+        "Check defense transparency",
+        "Verify business continuity"
+      ],
+      "expected_outcomes": [
+        "Users operate normally",
+        "Transparent security protection",
+        "Business operations uninterrupted"
+      ]
+    },
+    {
+      "step_number": 120,
+      "description": "Policy optimization phase",
+      "agents_to_act": ["email_security_analyst"],
+      "pause_after": true,
+      "analysis_points": [
+        "Review policy effectiveness metrics",
+        "Analyze false positive rates",
+        "Check optimization recommendations"
+      ],
+      "expected_outcomes": [
+        "Optimized security policies",
+        "Reduced false positives",
+        "Improved threat detection"
+      ]
+    },
+    {
+      "step_number": 140,
+      "description": "Final assessment and reporting",
+      "agents_to_act": ["incident_response_agent"],
+      "pause_after": false,
+      "analysis_points": [
+        "Generate comprehensive security report",
+        "Document lessons learned",
+        "Provide improvement recommendations"
+      ],
+      "expected_outcomes": [
+        "Complete security assessment",
+        "Documented best practices",
+        "Actionable recommendations"
+      ]
+    }
+  ],
+  "analysis_checkpoints": [0, 20, 40, 60, 80, 100, 120, 140, 149],
+  "reset_points": [30, 60, 90, 120]
+}

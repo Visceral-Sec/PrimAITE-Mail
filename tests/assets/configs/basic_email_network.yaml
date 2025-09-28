@@ -1,0 +1,37 @@
+# Basic email network configuration for testing
+# Minimal setup with SMTP server and email client
+
+simulation:
+  network:
+    nodes:
+      mail_server:
+        hostname: "mail_server"
+        type: "computer"
+        ip_address: "192.168.1.10"
+        default_gateway: "192.168.1.1"
+        services:
+          - type: "smtp-server"
+            domain: "testcompany.com"
+            max_message_size: 5242880  # 5MB
+            require_auth: false
+            enable_security_logging: true
+          - type: "pop3-server"
+            domain: "testcompany.com"
+            require_auth: false
+      
+      client_workstation:
+        hostname: "client_workstation"
+        type: "computer"
+        ip_address: "192.168.1.20"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "alice@testcompany.com"
+            default_smtp_server: "192.168.1.10"
+            auto_start: true
+
+# This configuration provides:
+# 1. Basic SMTP and POP3 server setup
+# 2. Single email client for testing
+# 3. No security policies (clean slate for testing)
+# 4. Standard network addressing

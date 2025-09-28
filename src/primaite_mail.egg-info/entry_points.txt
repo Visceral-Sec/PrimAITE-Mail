@@ -1,0 +1,2 @@
+[console_scripts]
+primaite = primaite.cli:app

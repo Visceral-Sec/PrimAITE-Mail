@@ -1,0 +1,461 @@
+# Base Security Policies Configuration Template
+# Modular security policy configurations for different security postures
+# This template provides the foundation for all security policy variations
+
+# Template metadata
+template:
+  name: "security_policies_base"
+  version: "1.0"
+  description: "Base security policies for email infrastructure"
+  category: "security"
+  extends: null
+  variables:
+    - name: "security_level"
+      type: "string"
+      default: "standard"
+      description: "Security level: minimal, standard, strict, maximum"
+    - name: "domain_name"
+      type: "string"
+      default: "demo.company.com"
+      description: "Primary domain name"
+    - name: "enable_advanced_filtering"
+      type: "boolean"
+      default: true
+      description: "Enable advanced content filtering"
+    - name: "quarantine_mode"
+      type: "string"
+      default: "automatic"
+      description: "Quarantine mode: disabled, manual, automatic"
+
+# Base security policy configurations
+security_policies:
+  # Email Security Policies
+  email_security:
+    # Sender-based blocking policies
+    sender_blocking:
+      # Basic blocked senders (always applied)
+      basic_blocked_senders:
+        - "phishing@attacker.com"
+        - "malware@badactor.net"
+        - "spam@suspicious.org"
+        - "noreply@phishing-site.com"
+      
+      # Domain-based blocking (wildcard patterns)
+      blocked_domains:
+        - "*@known-phishing.com"
+        - "*@malicious-domain.net"
+        - "*@fake-bank.com"
+        - "*@fake-company.org"
+        - "*@suspicious.org"
+      
+      # Advanced sender patterns (regex-based)
+      blocked_sender_patterns:
+        - "admin@fake-.*\\.com"
+        - "security@.*-phishing\\..*"
+        - "noreply@.*-scam\\..*"
+        - "support@.*-malware\\..*"
+      
+      # Whitelist (trusted senders - never blocked)
+      trusted_senders:
+        - "*@${domain_name}"
+        - "support@microsoft.com"
+        - "security@google.com"
+        - "noreply@github.com"
+        - "alerts@legitimate-service.com"
+
+    # IP-based blocking policies
+    ip_blocking:
+      # Single malicious IPs
+      blocked_ips:
+        - "203.0.113.50"      # Known attacker
+        - "203.0.113.100"     # Compromised system
+        - "198.51.100.10"     # Malware C2
+        - "192.0.2.50"        # Phishing server
+      
+      # Malicious subnets (CIDR notation)
+      blocked_subnets:
+        - "198.51.100.0/24"   # Malicious hosting provider
+        - "192.0.2.0/24"      # Known bad subnet
+        - "203.0.113.100/30"  # Small malicious range
+        - "10.0.0.0/8"        # Block private networks from external
+      
+      # Geographic blocking (country codes)
+      blocked_countries:
+        - "XX"  # Placeholder for high-risk countries
+        - "YY"  # Based on threat intelligence
+      
+      # Whitelist (trusted IP ranges)
+      trusted_ip_ranges:
+        - "192.168.0.0/16"    # Internal networks
+        - "10.0.0.0/8"        # Private networks (when internal)
+        - "172.16.0.0/12"     # Private networks
+        - "8.8.8.8/32"        # Google DNS
+        - "1.1.1.1/32"        # Cloudflare DNS
+
+    # Content-based filtering policies
+    content_filtering:
+      # Quarantine keywords (case-insensitive)
+      quarantine_keywords:
+        financial_fraud:
+          - "urgent wire transfer"
+          - "immediate payment required"
+          - "bank account suspended"
+          - "verify payment information"
+          - "update billing details"
+        
+        phishing_indicators:
+          - "click here immediately"
+          - "verify your account"
+          - "suspended account"
+          - "confirm your identity"
+          - "act now or lose access"
+        
+        social_engineering:
+          - "congratulations you have won"
+          - "nigerian prince"
+          - "inheritance claim"
+          - "lottery winner"
+          - "tax refund available"
+        
+        business_compromise:
+          - "ceo urgent request"
+          - "confidential invoice"
+          - "change payment details"
+          - "wire transfer instructions"
+          - "vendor payment update"
+      
+      # Subject line patterns (regex-based)
+      blocked_subject_patterns:
+        - "^RE: Urgent.*"
+        - ".*WINNER.*"
+        - ".*CONGRATULATIONS.*"
+        - ".*INHERITANCE.*"
+        - ".*WIRE TRANSFER.*"
+        - ".*SUSPENDED.*ACCOUNT.*"
+        - ".*VERIFY.*IMMEDIATELY.*"
+      
+      # Body content patterns
+      blocked_body_patterns:
+        - "click.*here.*immediately"
+        - "verify.*account.*suspended"
+        - "urgent.*wire.*transfer"
+        - "congratulations.*winner"
+        - "inheritance.*claim.*funds"
+
+    # Attachment security policies
+    attachment_security:
+      # File extension blocking
+      blocked_extensions:
+        executable_files:
+          - ".exe"
+          - ".scr"
+          - ".bat"
+          - ".com"
+          - ".pif"
+          - ".cmd"
+          - ".msi"
+        
+        script_files:
+          - ".vbs"
+          - ".js"
+          - ".jse"
+          - ".wsf"
+          - ".wsh"
+          - ".ps1"
+        
+        archive_files:
+          - ".zip"  # Only if contains blocked files
+          - ".rar"
+          - ".7z"
+          - ".tar.gz"
+        
+        office_macros:
+          - ".xlsm"  # Excel with macros
+          - ".docm"  # Word with macros
+          - ".pptm"  # PowerPoint with macros
+      
+      # Allowed file types (whitelist approach)
+      allowed_extensions:
+        - ".pdf"
+        - ".docx"
+        - ".xlsx"
+        - ".pptx"
+        - ".txt"
+        - ".rtf"
+        - ".jpg"
+        - ".jpeg"
+        - ".png"
+        - ".gif"
+      
+      # Size restrictions
+      size_limits:
+        max_attachment_size_mb: 5
+        max_total_attachments_mb: 10
+        max_attachment_count: 10
+      
+      # MIME type restrictions
+      allowed_mime_types:
+        - "application/pdf"
+        - "application/msword"
+        - "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        - "application/vnd.ms-excel"
+        - "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        - "image/jpeg"
+        - "image/png"
+        - "image/gif"
+        - "text/plain"
+      
+      # Malware scanning
+      malware_scanning:
+        enable_scanning: true
+        quarantine_suspicious: true
+        scan_archives: true
+        scan_embedded_objects: true
+        heuristic_analysis: true
+
+    # Rate limiting policies
+    rate_limiting:
+      # Per-sender limits
+      sender_limits:
+        max_emails_per_hour: 100
+        max_emails_per_day: 500
+        max_recipients_per_hour: 200
+        max_recipients_per_day: 1000
+        burst_threshold: 10  # Max emails in 1 minute
+      
+      # Per-IP limits
+      ip_limits:
+        max_connections_per_hour: 200
+        max_emails_per_ip_per_hour: 150
+        max_concurrent_connections: 10
+        connection_rate_limit: 5  # Connections per minute
+      
+      # Global limits
+      global_limits:
+        max_total_emails_per_hour: 5000
+        max_total_connections: 500
+        max_queue_size: 10000
+        max_processing_time: 300  # 5 minutes
+
+    # Reputation-based filtering
+    reputation_filtering:
+      # SPF/DKIM/DMARC policies
+      authentication_policies:
+        enable_spf_check: true
+        spf_fail_action: "quarantine"  # reject, quarantine, tag
+        enable_dkim_check: true
+        dkim_fail_action: "tag"
+        enable_dmarc_check: true
+        dmarc_fail_action: "quarantine"
+      
+      # Reputation scoring
+      reputation_scoring:
+        min_reputation_score: 50  # 0-100 scale
+        quarantine_low_reputation: true
+        reputation_sources:
+          - "spamhaus"
+          - "barracuda"
+          - "microsoft_defender"
+      
+      # Greylisting
+      greylisting:
+        enable_greylisting: true
+        initial_delay_minutes: 5
+        max_delay_minutes: 60
+        whitelist_after_success: true
+
+  # Network Security Policies
+  network_security:
+    # Firewall policies
+    firewall_policies:
+      # DMZ firewall rules
+      dmz_firewall:
+        default_policy: "DENY"
+        rules:
+          - rule_id: 1
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "any"
+            destination: "192.168.100.10"
+            port: 25
+            description: "Allow SMTP to mail server"
+          
+          - rule_id: 2
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "192.168.1.0/24"
+            destination: "192.168.100.10"
+            port: 110
+            description: "Allow POP3 from corporate network"
+          
+          - rule_id: 3
+            action: "DENY"
+            protocol: "any"
+            source: "203.0.113.50"
+            destination: "any"
+            port: "any"
+            description: "Block known malicious IP"
+      
+      # Corporate firewall rules
+      corporate_firewall:
+        default_policy: "DENY"
+        rules:
+          - rule_id: 1
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "192.168.1.0/24"
+            destination: "192.168.100.10"
+            port: 25
+            description: "Allow SMTP to mail server"
+          
+          - rule_id: 2
+            action: "DENY"
+            protocol: "any"
+            source: "192.168.1.0/24"
+            destination: "203.0.113.0/24"
+            port: "any"
+            description: "Block direct internet access"
+
+    # Intrusion detection policies
+    intrusion_detection:
+      # Email-specific IDS rules
+      email_ids_rules:
+        - rule_id: "EMAIL_001"
+          description: "Detect phishing keywords"
+          pattern: "urgent.*wire.*transfer"
+          action: "alert"
+          severity: "high"
+        
+        - rule_id: "EMAIL_002"
+          description: "Detect suspicious attachments"
+          pattern: "attachment.*\\.exe"
+          action: "block"
+          severity: "critical"
+        
+        - rule_id: "EMAIL_003"
+          description: "Detect mass mailing"
+          pattern: "recipients > 50"
+          action: "alert"
+          severity: "medium"
+
+  # Monitoring and Alerting Policies
+  monitoring_policies:
+    # Security event monitoring
+    security_monitoring:
+      # Event types to monitor
+      monitored_events:
+        - "email_blocked"
+        - "connection_blocked"
+        - "email_quarantined"
+        - "malware_detected"
+        - "rate_limit_violation"
+        - "authentication_failure"
+        - "policy_violation"
+      
+      # Alert thresholds
+      alert_thresholds:
+        blocked_emails_per_hour: 50
+        quarantined_emails_per_hour: 20
+        malware_detections_per_hour: 5
+        failed_authentications_per_hour: 100
+        rate_limit_violations_per_hour: 10
+      
+      # Alert destinations
+      alert_destinations:
+        - "security@${domain_name}"
+        - "soc@${domain_name}"
+        - "admin@${domain_name}"
+      
+      # Reporting schedule
+      reporting_schedule:
+        daily_summary: true
+        weekly_report: true
+        monthly_analysis: true
+        real_time_alerts: true
+
+    # Performance monitoring
+    performance_monitoring:
+      # Metrics to track
+      performance_metrics:
+        - "email_processing_time"
+        - "queue_size"
+        - "connection_count"
+        - "disk_usage"
+        - "memory_usage"
+        - "cpu_usage"
+      
+      # Performance thresholds
+      performance_thresholds:
+        max_processing_time_seconds: 30
+        max_queue_size: 1000
+        max_disk_usage_percent: 85
+        max_memory_usage_percent: 80
+        max_cpu_usage_percent: 75
+
+# Policy enforcement levels
+enforcement_levels:
+  minimal:
+    description: "Basic security with minimal restrictions"
+    features:
+      - "Basic sender blocking"
+      - "Simple attachment restrictions"
+      - "Basic rate limiting"
+    
+  standard:
+    description: "Balanced security for normal operations"
+    features:
+      - "Comprehensive sender/IP blocking"
+      - "Content-based filtering"
+      - "Attachment scanning"
+      - "Rate limiting"
+      - "Basic reputation filtering"
+    
+  strict:
+    description: "High security with strict controls"
+    features:
+      - "Advanced pattern matching"
+      - "Strict attachment policies"
+      - "Aggressive rate limiting"
+      - "Full reputation filtering"
+      - "Enhanced monitoring"
+    
+  maximum:
+    description: "Maximum security for high-risk environments"
+    features:
+      - "Whitelist-only approach"
+      - "Deep content inspection"
+      - "Zero-tolerance policies"
+      - "Real-time threat intelligence"
+      - "Comprehensive logging"
+
+# Configuration metadata
+metadata:
+  template_type: "base"
+  category: "security_policies"
+  version: "1.0"
+  description: "Base security policies for email infrastructure"
+  created_date: "2025-01-27"
+  
+  policy_categories:
+    - "Email Security"
+    - "Network Security"
+    - "Monitoring Policies"
+    - "Enforcement Levels"
+  
+  security_controls:
+    - "Sender and IP blocking"
+    - "Content-based filtering"
+    - "Attachment restrictions"
+    - "Rate limiting"
+    - "Reputation filtering"
+    - "Network firewalls"
+    - "Intrusion detection"
+    - "Security monitoring"
+  
+  customization_points:
+    - "Security levels"
+    - "Blocking policies"
+    - "Content filters"
+    - "Rate limits"
+    - "Monitoring thresholds"
+    - "Alert configurations"

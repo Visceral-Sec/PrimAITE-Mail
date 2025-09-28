@@ -1,0 +1,262 @@
+# Base Network Topology Configuration Template
+# Modular enterprise network architecture for email security demonstrations
+# This template provides the foundation for all scenario variations
+
+# Template metadata
+template:
+  name: "network_topology_base"
+  version: "1.0"
+  description: "Base enterprise network topology with DMZ, corporate, and remote networks"
+  category: "network"
+  extends: null
+  variables:
+    - name: "domain_name"
+      type: "string"
+      default: "demo.company.com"
+      description: "Primary domain name for the organization"
+    - name: "corporate_subnet"
+      type: "string"
+      default: "192.168.1.0/24"
+      description: "Corporate network subnet"
+    - name: "dmz_subnet"
+      type: "string"
+      default: "192.168.100.0/24"
+      description: "DMZ network subnet"
+    - name: "remote_subnet"
+      type: "string"
+      default: "192.168.50.0/24"
+      description: "Remote office network subnet"
+    - name: "internet_subnet"
+      type: "string"
+      default: "203.0.113.0/24"
+      description: "External internet network subnet"
+
+# Base simulation configuration
+simulation:
+  network:
+    # Network topology with multiple subnets and routing
+    subnets:
+      # Internet/External Network
+      internet:
+        network: "${internet_subnet}"
+        gateway: "203.0.113.1"
+        description: "External Internet network for attackers and external services"
+      
+      # DMZ Network - Email and web infrastructure
+      dmz:
+        network: "${dmz_subnet}"
+        gateway: "192.168.100.1"
+        description: "DMZ network hosting email and web services"
+      
+      # Corporate Network - Internal users and security
+      corporate:
+        network: "${corporate_subnet}"
+        gateway: "192.168.1.1"
+        description: "Corporate internal network for employees and security team"
+      
+      # Remote Office Network
+      remote_office:
+        network: "${remote_subnet}"
+        gateway: "192.168.50.1"
+        description: "Remote office network for field workers"
+
+    # Network routing configuration
+    routing:
+      # Internet to DMZ routing
+      - source: "${internet_subnet}"
+        destination: "${dmz_subnet}"
+        gateway: "192.168.100.1"
+        interface: "dmz_firewall"
+      
+      # DMZ to Corporate routing
+      - source: "${dmz_subnet}"
+        destination: "${corporate_subnet}"
+        gateway: "192.168.1.1"
+        interface: "corporate_firewall"
+      
+      # DMZ to Remote Office routing
+      - source: "${dmz_subnet}"
+        destination: "${remote_subnet}"
+        gateway: "192.168.50.1"
+        interface: "remote_firewall"
+
+    nodes:
+      # ========== DMZ NETWORK ==========
+      
+      # DMZ Firewall
+      dmz_firewall:
+        hostname: "dmz_firewall"
+        type: "firewall"
+        ip_address: "192.168.100.1"
+        subnet: "dmz"
+        interfaces:
+          - name: "external"
+            ip_address: "203.0.113.1"
+            subnet: "internet"
+          - name: "internal"
+            ip_address: "192.168.100.1"
+            subnet: "dmz"
+        firewall_rules:
+          # Allow SMTP traffic to mail server
+          - rule_id: 1
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "any"
+            destination: "192.168.100.10"
+            port: 25
+            description: "Allow SMTP to mail server"
+          
+          # Allow POP3 traffic to mail server
+          - rule_id: 2
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "${corporate_subnet}"
+            destination: "192.168.100.10"
+            port: 110
+            description: "Allow POP3 from corporate network"
+          
+          # Allow DNS queries
+          - rule_id: 3
+            action: "ALLOW"
+            protocol: "UDP"
+            source: "any"
+            destination: "192.168.100.20"
+            port: 53
+            description: "Allow DNS queries"
+
+      # ========== CORPORATE NETWORK ==========
+      
+      # Corporate Firewall
+      corporate_firewall:
+        hostname: "corporate_firewall"
+        type: "firewall"
+        ip_address: "192.168.1.1"
+        subnet: "corporate"
+        interfaces:
+          - name: "dmz"
+            ip_address: "192.168.100.2"
+            subnet: "dmz"
+          - name: "corporate"
+            ip_address: "192.168.1.1"
+            subnet: "corporate"
+        firewall_rules:
+          # Allow outbound email traffic
+          - rule_id: 1
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "${corporate_subnet}"
+            destination: "192.168.100.10"
+            port: 25
+            description: "Allow SMTP to mail server"
+          
+          - rule_id: 2
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "${corporate_subnet}"
+            destination: "192.168.100.10"
+            port: 110
+            description: "Allow POP3 to mail server"
+          
+          # Allow DNS queries
+          - rule_id: 3
+            action: "ALLOW"
+            protocol: "UDP"
+            source: "${corporate_subnet}"
+            destination: "192.168.100.20"
+            port: 53
+            description: "Allow DNS queries"
+          
+          # Block direct internet access (force through DMZ)
+          - rule_id: 4
+            action: "DENY"
+            protocol: "any"
+            source: "${corporate_subnet}"
+            destination: "${internet_subnet}"
+            port: "any"
+            description: "Block direct internet access"
+
+      # ========== REMOTE OFFICE NETWORK ==========
+      
+      # Remote Office Firewall
+      remote_firewall:
+        hostname: "remote_firewall"
+        type: "firewall"
+        ip_address: "192.168.50.1"
+        subnet: "remote_office"
+        interfaces:
+          - name: "dmz"
+            ip_address: "192.168.100.3"
+            subnet: "dmz"
+          - name: "remote"
+            ip_address: "192.168.50.1"
+            subnet: "remote_office"
+        firewall_rules:
+          # Allow email traffic (less restrictive for remote workers)
+          - rule_id: 1
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "${remote_subnet}"
+            destination: "192.168.100.10"
+            port: 25
+            description: "Allow SMTP to mail server"
+          
+          - rule_id: 2
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "${remote_subnet}"
+            destination: "192.168.100.10"
+            port: 110
+            description: "Allow POP3 to mail server"
+          
+          # Allow web access (potential security risk)
+          - rule_id: 3
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "${remote_subnet}"
+            destination: "any"
+            port: 80
+            description: "Allow HTTP access"
+          
+          - rule_id: 4
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "${remote_subnet}"
+            destination: "any"
+            port: 443
+            description: "Allow HTTPS access"
+
+# Configuration metadata
+metadata:
+  template_type: "base"
+  category: "network_topology"
+  version: "1.0"
+  description: "Base enterprise network topology for email security demonstrations"
+  created_date: "2025-01-27"
+  
+  networks:
+    - name: "Internet"
+      subnet: "${internet_subnet}"
+      purpose: "External attackers and public services"
+    - name: "DMZ"
+      subnet: "${dmz_subnet}"
+      purpose: "Email and web infrastructure"
+    - name: "Corporate"
+      subnet: "${corporate_subnet}"
+      purpose: "Internal users and security team"
+    - name: "Remote Office"
+      subnet: "${remote_subnet}"
+      purpose: "Remote workers with elevated risk"
+  
+  security_features:
+    - "Multi-layer firewall protection"
+    - "Network segmentation"
+    - "Controlled internet access"
+    - "DMZ isolation"
+    - "Remote office flexibility"
+  
+  customization_points:
+    - "Subnet addressing"
+    - "Firewall rules"
+    - "Domain configuration"
+    - "Routing policies"
+    - "Security policies"

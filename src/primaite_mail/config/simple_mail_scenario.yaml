@@ -1,0 +1,450 @@
+metadata:
+  version: 4.0
+
+io_settings:
+  save_agent_actions: true
+  save_step_metadata: false
+  save_pcap_logs: false
+  save_sys_logs: true
+  sys_log_level: INFO
+
+game:
+  max_episode_length: 100
+  ports:
+    - SMTP
+    - POP3
+    - DNS
+    - HTTP
+  protocols:
+    - ICMP
+    - TCP
+    - UDP
+  thresholds:
+    nmne:
+      high: 10
+      medium: 5
+      low: 0
+
+agents:
+  # Green mail users - simulate normal office email usage
+  - ref: alice_mail_user
+    team: GREEN
+    type: green-mail-agent
+    
+    agent_settings:
+      send_probability: 0.6
+      retrieve_probability: 0.3
+      idle_probability: 0.1
+      email_frequency: 15
+      email_variance: 5
+      node_name: client_alice
+      sender_email: alice@company.com
+      recipients:
+        - bob@company.com
+        - charlie@company.com
+        - admin@company.com
+      email_subjects:
+        - "Project Alpha Update"
+        - "Meeting Notes"
+        - "Weekly Report"
+        - "Quick Question"
+        - "Document Review"
+      email_templates:
+        - "Hi,\n\nHere's the latest update on Project Alpha.\n\nBest regards,\nAlice"
+        - "Hello,\n\nAttached are the meeting notes from today.\n\nThanks,\nAlice"
+        - "Hi there,\n\nPlease review the attached document.\n\nRegards,\nAlice"
+
+    action_space:
+      action_map:
+        0:
+          action: do-nothing
+          options: {}
+        1:
+          action: email-send
+          options:
+            node_name: client_alice
+            to: ["bob@company.com"]
+            subject: "Project Alpha Update"
+            body: "Hi,\n\nHere's the latest update on Project Alpha.\n\nBest regards,\nAlice"
+            sender: alice@company.com
+        2:
+          action: email-send
+          options:
+            node_name: client_alice
+            to: ["charlie@company.com"]
+            subject: "Meeting Notes"
+            body: "Hello,\n\nAttached are the meeting notes from today.\n\nThanks,\nAlice"
+            sender: alice@company.com
+        3:
+          action: email-retrieve
+          options:
+            node_name: client_alice
+            username: alice@company.com
+        4:
+          action: email-configure
+          options:
+            node_name: client_alice
+            username: alice@company.com
+            smtp_server: 192.168.1.10
+            pop3_server: 192.168.1.10
+
+    reward_function:
+      reward_components:
+        - type: dummy
+          weight: 1.0
+
+  - ref: bob_mail_user
+    team: GREEN
+    type: green-mail-agent
+    
+    agent_settings:
+      send_probability: 0.5
+      retrieve_probability: 0.4
+      idle_probability: 0.1
+      email_frequency: 20
+      email_variance: 7
+      node_name: client_bob
+      sender_email: bob@company.com
+      recipients:
+        - alice@company.com
+        - charlie@company.com
+        - admin@company.com
+      email_subjects:
+        - "Development Update"
+        - "Code Review"
+        - "Bug Report"
+        - "Feature Request"
+        - "Technical Discussion"
+      email_templates:
+        - "Hi,\n\nThe development is progressing well.\n\nBest,\nBob"
+        - "Hello,\n\nCould you review this code change?\n\nThanks,\nBob"
+        - "Hi,\n\nFound an issue that needs attention.\n\nRegards,\nBob"
+
+    action_space:
+      action_map:
+        0:
+          action: do-nothing
+          options: {}
+        1:
+          action: email-send
+          options:
+            node_name: client_bob
+            to: ["alice@company.com"]
+            subject: "Development Update"
+            body: "Hi,\n\nThe development is progressing well.\n\nBest,\nBob"
+            sender: bob@company.com
+        2:
+          action: email-send
+          options:
+            node_name: client_bob
+            to: ["charlie@company.com"]
+            subject: "Code Review"
+            body: "Hello,\n\nCould you review this code change?\n\nThanks,\nBob"
+            sender: bob@company.com
+        3:
+          action: email-retrieve
+          options:
+            node_name: client_bob
+            username: bob@company.com
+        4:
+          action: email-configure
+          options:
+            node_name: client_bob
+            username: bob@company.com
+            smtp_server: 192.168.1.10
+            pop3_server: 192.168.1.10
+
+    reward_function:
+      reward_components:
+        - type: dummy
+          weight: 1.0
+
+  - ref: charlie_mail_user
+    team: GREEN
+    type: green-mail-agent
+    
+    agent_settings:
+      send_probability: 0.4
+      retrieve_probability: 0.5
+      idle_probability: 0.1
+      email_frequency: 25
+      email_variance: 8
+      node_name: client_charlie
+      sender_email: charlie@company.com
+      recipients:
+        - alice@company.com
+        - bob@company.com
+        - admin@company.com
+      email_subjects:
+        - "Design Proposal"
+        - "User Feedback"
+        - "Testing Results"
+        - "Requirements Update"
+        - "Client Meeting"
+      email_templates:
+        - "Hi,\n\nHere's the new design proposal.\n\nBest,\nCharlie"
+        - "Hello,\n\nReceived feedback from the client.\n\nThanks,\nCharlie"
+        - "Hi,\n\nTesting results are attached.\n\nRegards,\nCharlie"
+
+    action_space:
+      action_map:
+        0:
+          action: do-nothing
+          options: {}
+        1:
+          action: email-send
+          options:
+            node_name: client_charlie
+            to: ["alice@company.com"]
+            subject: "Design Proposal"
+            body: "Hi,\n\nHere's the new design proposal.\n\nBest,\nCharlie"
+            sender: charlie@company.com
+        2:
+          action: email-send
+          options:
+            node_name: client_charlie
+            to: ["bob@company.com"]
+            subject: "User Feedback"
+            body: "Hello,\n\nReceived feedback from the client.\n\nThanks,\nCharlie"
+            sender: charlie@company.com
+        3:
+          action: email-retrieve
+          options:
+            node_name: client_charlie
+            username: charlie@company.com
+        4:
+          action: email-configure
+          options:
+            node_name: client_charlie
+            username: charlie@company.com
+            smtp_server: 192.168.1.10
+            pop3_server: 192.168.1.10
+
+    reward_function:
+      reward_components:
+        - type: dummy
+          weight: 1.0
+
+  # Blue agent for monitoring email activity
+  - ref: email_monitor
+    team: BLUE
+    type: probabilistic-agent
+    
+    agent_settings:
+      action_probabilities:
+        0: 0.7  # mostly idle monitoring
+        1: 0.2  # check mail server status
+        2: 0.1  # scan network
+
+    action_space:
+      action_map:
+        0:
+          action: do-nothing
+          options: {}
+        1:
+          action: node-service-scan
+          options:
+            node_name: mail_server
+            service_name: smtp-server
+        2:
+          action: node-service-scan
+          options:
+            node_name: mail_server
+            service_name: pop3-server
+
+    reward_function:
+      reward_components:
+        - type: dummy
+          weight: 1.0
+
+simulation:
+  network:
+    nmne_config:
+      capture_nmne: true
+      nmne_capture_keywords:
+        - SMTP
+        - POP3
+        - EMAIL
+    
+    nodes:
+      # Network Infrastructure
+      - hostname: router_main
+        type: router
+        num_ports: 3
+        ports:
+          1:
+            ip_address: 192.168.1.1
+            subnet_mask: 255.255.255.0
+          2:
+            ip_address: 192.168.2.1
+            subnet_mask: 255.255.255.0
+        acl:
+          0:
+            action: PERMIT
+            src_port: SMTP
+            dst_port: SMTP
+          1:
+            action: PERMIT
+            src_port: POP3
+            dst_port: POP3
+          2:
+            action: PERMIT
+            src_port: DNS
+            dst_port: DNS
+          3:
+            action: PERMIT
+            protocol: ICMP
+
+      - hostname: switch_clients
+        type: switch
+        num_ports: 8
+
+      - hostname: switch_servers
+        type: switch
+        num_ports: 8
+
+      # Mail Server
+      - hostname: mail_server
+        type: server
+        ip_address: 192.168.1.10
+        subnet_mask: 255.255.255.0
+        default_gateway: 192.168.1.1
+        dns_server: 192.168.1.11
+        
+        services:
+          - type: smtp-server
+            options:
+              require_auth: false
+          - type: pop3-server
+
+      # DNS Server
+      - hostname: dns_server
+        type: server
+        ip_address: 192.168.1.11
+        subnet_mask: 255.255.255.0
+        default_gateway: 192.168.1.1
+        
+        services:
+          - type: dns-server
+            options:
+              domain_mapping:
+                company.com: 192.168.1.10
+                mail.company.com: 192.168.1.10
+
+      # Client Computers
+      - hostname: client_alice
+        type: computer
+        ip_address: 192.168.2.21
+        subnet_mask: 255.255.255.0
+        default_gateway: 192.168.2.1
+        dns_server: 192.168.1.11
+        
+        applications:
+          - type: email-client
+            options:
+              username: alice@company.com
+              default_smtp_server: 192.168.1.10
+              default_pop3_server: 192.168.1.10
+              auto_start: true
+        
+        services:
+          - type: dns-client
+
+      - hostname: client_bob
+        type: computer
+        ip_address: 192.168.2.22
+        subnet_mask: 255.255.255.0
+        default_gateway: 192.168.2.1
+        dns_server: 192.168.1.11
+        
+        applications:
+          - type: email-client
+            options:
+              username: bob@company.com
+              default_smtp_server: 192.168.1.10
+              default_pop3_server: 192.168.1.10
+              auto_start: true
+        
+        services:
+          - type: dns-client
+
+      - hostname: client_charlie
+        type: computer
+        ip_address: 192.168.2.23
+        subnet_mask: 255.255.255.0
+        default_gateway: 192.168.2.1
+        dns_server: 192.168.1.11
+        
+        applications:
+          - type: email-client
+            options:
+              username: charlie@company.com
+              default_smtp_server: 192.168.1.10
+              default_pop3_server: 192.168.1.10
+              auto_start: true
+        
+        services:
+          - type: dns-client
+
+      # Admin Workstation
+      - hostname: admin_workstation
+        type: computer
+        ip_address: 192.168.1.20
+        subnet_mask: 255.255.255.0
+        default_gateway: 192.168.1.1
+        dns_server: 192.168.1.11
+        
+        applications:
+          - type: email-client
+            options:
+              username: admin@company.com
+              default_smtp_server: 192.168.1.10
+              default_pop3_server: 192.168.1.10
+              auto_start: true
+        
+        services:
+          - type: dns-client
+
+    links:
+      # Router to switches
+      - endpoint_a_hostname: router_main
+        endpoint_a_port: 1
+        endpoint_b_hostname: switch_servers
+        endpoint_b_port: 8
+      
+      - endpoint_a_hostname: router_main
+        endpoint_a_port: 2
+        endpoint_b_hostname: switch_clients
+        endpoint_b_port: 8
+
+      # Servers to switch
+      - endpoint_a_hostname: switch_servers
+        endpoint_a_port: 1
+        endpoint_b_hostname: mail_server
+        endpoint_b_port: 1
+      
+      - endpoint_a_hostname: switch_servers
+        endpoint_a_port: 2
+        endpoint_b_hostname: dns_server
+        endpoint_b_port: 1
+      
+      - endpoint_a_hostname: switch_servers
+        endpoint_a_port: 3
+        endpoint_b_hostname: admin_workstation
+        endpoint_b_port: 1
+
+      # Clients to switch
+      - endpoint_a_hostname: switch_clients
+        endpoint_a_port: 1
+        endpoint_b_hostname: client_alice
+        endpoint_b_port: 1
+      
+      - endpoint_a_hostname: switch_clients
+        endpoint_a_port: 2
+        endpoint_b_hostname: client_bob
+        endpoint_b_port: 1
+      
+      - endpoint_a_hostname: switch_clients
+        endpoint_a_port: 3
+        endpoint_b_hostname: client_charlie
+        endpoint_b_port: 1

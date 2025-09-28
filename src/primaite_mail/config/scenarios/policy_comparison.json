@@ -1,0 +1,534 @@
+{
+  "scenario": {
+    "name": "policy_comparison",
+    "version": "1.0",
+    "description": "Comparative analysis of different security policy configurations",
+    "duration_steps": 100,
+    "category": "policy_analysis",
+    "learning_objectives": [
+      "Compare security policy effectiveness",
+      "Understand policy trade-offs",
+      "Analyze false positive rates",
+      "Learn policy optimization techniques"
+    ]
+  },
+  
+  "configuration": {
+    "extends": [
+      "templates/base/network_topology_base.yaml",
+      "templates/base/email_services_base.yaml",
+      "templates/base/agent_behaviors_base.yaml",
+      "templates/base/security_policies_base.yaml"
+    ],
+    
+    "variables": {
+      "domain_name": "demo.company.com",
+      "mail_server_ip": "192.168.100.10",
+      "dns_server_ip": "192.168.100.20",
+      "simulation_steps": 100,
+      "agent_activity_level": "normal"
+    }
+  },
+  
+  "policy_variants": [
+    {
+      "name": "minimal_security",
+      "description": "Basic security with minimal restrictions for high usability",
+      "security_level": "minimal",
+      "configuration": {
+        "email_security": {
+          "sender_blocking": {
+            "basic_blocked_senders": [
+              "phishing@attacker.com"
+            ],
+            "blocked_domains": []
+          },
+          "ip_blocking": {
+            "blocked_ips": [],
+            "blocked_subnets": []
+          },
+          "content_filtering": {
+            "quarantine_keywords": [
+              "urgent wire transfer"
+            ]
+          },
+          "attachment_security": {
+            "blocked_extensions": [".exe"],
+            "max_attachment_size_mb": 10,
+            "malware_scanning": false
+          },
+          "rate_limiting": {
+            "max_emails_per_hour": 500,
+            "burst_threshold": 50
+          }
+        }
+      },
+      "expected_characteristics": {
+        "usability": "high",
+        "security": "low",
+        "false_positives": "very_low",
+        "attack_success_rate": "high"
+      }
+    },
+    
+    {
+      "name": "standard_security",
+      "description": "Balanced security for normal business operations",
+      "security_level": "standard",
+      "configuration": {
+        "email_security": {
+          "sender_blocking": {
+            "basic_blocked_senders": [
+              "phishing@attacker.com",
+              "malware@badactor.net",
+              "spam@suspicious.org"
+            ],
+            "blocked_domains": [
+              "*@known-phishing.com",
+              "*@malicious-domain.net"
+            ]
+          },
+          "ip_blocking": {
+            "blocked_ips": [
+              "203.0.113.50"
+            ],
+            "blocked_subnets": [
+              "198.51.100.0/24"
+            ]
+          },
+          "content_filtering": {
+            "quarantine_keywords": [
+              "urgent wire transfer",
+              "verify your account",
+              "suspended account"
+            ]
+          },
+          "attachment_security": {
+            "blocked_extensions": [".exe", ".scr", ".bat", ".com"],
+            "max_attachment_size_mb": 5,
+            "malware_scanning": true
+          },
+          "rate_limiting": {
+            "max_emails_per_hour": 100,
+            "burst_threshold": 10
+          }
+        }
+      },
+      "expected_characteristics": {
+        "usability": "medium",
+        "security": "medium",
+        "false_positives": "low",
+        "attack_success_rate": "medium"
+      }
+    },
+    
+    {
+      "name": "strict_security",
+      "description": "High security with strict controls for sensitive environments",
+      "security_level": "strict",
+      "configuration": {
+        "email_security": {
+          "sender_blocking": {
+            "basic_blocked_senders": [
+              "phishing@attacker.com",
+              "malware@badactor.net",
+              "spam@suspicious.org",
+              "noreply@phishing-site.com"
+            ],
+            "blocked_domains": [
+              "*@known-phishing.com",
+              "*@malicious-domain.net",
+              "*@fake-bank.com",
+              "*@suspicious.org"
+            ]
+          },
+          "ip_blocking": {
+            "blocked_ips": [
+              "203.0.113.50",
+              "203.0.113.100"
+            ],
+            "blocked_subnets": [
+              "198.51.100.0/24",
+              "192.0.2.0/24"
+            ]
+          },
+          "content_filtering": {
+            "quarantine_keywords": [
+              "urgent wire transfer",
+              "verify your account",
+              "suspended account",
+              "click here immediately",
+              "confirm your identity",
+              "congratulations you have won"
+            ]
+          },
+          "attachment_security": {
+            "blocked_extensions": [".exe", ".scr", ".bat", ".com", ".pif", ".vbs", ".js"],
+            "max_attachment_size_mb": 3,
+            "malware_scanning": true,
+            "quarantine_suspicious": true
+          },
+          "rate_limiting": {
+            "max_emails_per_hour": 50,
+            "burst_threshold": 5
+          }
+        }
+      },
+      "expected_characteristics": {
+        "usability": "low",
+        "security": "high",
+        "false_positives": "medium",
+        "attack_success_rate": "low"
+      }
+    },
+    
+    {
+      "name": "maximum_security",
+      "description": "Maximum security with zero-tolerance policies",
+      "security_level": "maximum",
+      "configuration": {
+        "email_security": {
+          "sender_blocking": {
+            "whitelist_mode": true,
+            "trusted_senders": [
+              "*@demo.company.com",
+              "support@microsoft.com",
+              "security@google.com"
+            ],
+            "blocked_domains": [
+              "*"  # Block all except whitelist
+            ]
+          },
+          "ip_blocking": {
+            "whitelist_mode": true,
+            "trusted_ip_ranges": [
+              "192.168.0.0/16",
+              "8.8.8.8/32"
+            ]
+          },
+          "content_filtering": {
+            "deep_inspection": true,
+            "quarantine_keywords": [
+              "urgent",
+              "immediate",
+              "verify",
+              "suspended",
+              "click",
+              "winner",
+              "congratulations",
+              "inheritance",
+              "transfer"
+            ]
+          },
+          "attachment_security": {
+            "whitelist_mode": true,
+            "allowed_extensions": [".pdf", ".docx", ".xlsx", ".txt"],
+            "max_attachment_size_mb": 1,
+            "mandatory_scanning": true,
+            "quarantine_all_suspicious": true
+          },
+          "rate_limiting": {
+            "max_emails_per_hour": 20,
+            "burst_threshold": 2
+          }
+        }
+      },
+      "expected_characteristics": {
+        "usability": "very_low",
+        "security": "very_high",
+        "false_positives": "high",
+        "attack_success_rate": "very_low"
+      }
+    }
+  ],
+  
+  "agents": {
+    "enabled_teams": ["green_team", "red_team"],
+    "disabled_teams": ["blue_team"],
+    
+    "green_team": {
+      "alice_marketing": {
+        "enabled": true,
+        "behavior_overrides": {
+          "send_probability": 0.6,
+          "retrieve_probability": 0.3,
+          "idle_probability": 0.1,
+          "email_frequency": 10,
+          "external_communication_ratio": 0.6
+        }
+      },
+      
+      "bob_developer": {
+        "enabled": true,
+        "behavior_overrides": {
+          "send_probability": 0.5,
+          "retrieve_probability": 0.4,
+          "idle_probability": 0.1,
+          "email_frequency": 12,
+          "attachment_usage_ratio": 0.7
+        }
+      },
+      
+      "charlie_assistant": {
+        "enabled": true,
+        "behavior_overrides": {
+          "send_probability": 0.5,
+          "retrieve_probability": 0.4,
+          "idle_probability": 0.1,
+          "email_frequency": 11,
+          "multi_recipient_ratio": 0.5
+        }
+      },
+      
+      "remote_user": {
+        "enabled": true,
+        "behavior_overrides": {
+          "send_probability": 0.3,
+          "retrieve_probability": 0.6,
+          "idle_probability": 0.1,
+          "email_frequency": 20
+        }
+      }
+    },
+    
+    "red_team": {
+      "email_phishing_agent": {
+        "enabled": true,
+        "node_name": "attacker_system",
+        "behavior_overrides": {
+          "phishing_probability": 0.6,
+          "reconnaissance_probability": 0.3,
+          "payload_delivery_probability": 0.1,
+          "email_frequency": 8
+        },
+        "attack_variants": [
+          {
+            "type": "basic_phishing",
+            "sophistication": "low",
+            "evasion_techniques": "none"
+          },
+          {
+            "type": "targeted_phishing",
+            "sophistication": "medium",
+            "evasion_techniques": "basic"
+          },
+          {
+            "type": "advanced_phishing",
+            "sophistication": "high",
+            "evasion_techniques": "advanced"
+          }
+        ]
+      }
+    }
+  },
+  
+  "comparison_metrics": {
+    "security_effectiveness": [
+      {
+        "metric": "blocked_attacks",
+        "description": "Percentage of malicious emails blocked",
+        "measurement": "percentage",
+        "target_range": "70-95%"
+      },
+      {
+        "metric": "quarantined_emails",
+        "description": "Number of emails quarantined for review",
+        "measurement": "count",
+        "target_range": "5-20"
+      },
+      {
+        "metric": "successful_attacks",
+        "description": "Number of attacks that bypassed security",
+        "measurement": "count",
+        "target_range": "0-5"
+      }
+    ],
+    
+    "usability_impact": [
+      {
+        "metric": "false_positives",
+        "description": "Legitimate emails incorrectly blocked",
+        "measurement": "count",
+        "target_range": "0-10"
+      },
+      {
+        "metric": "delivery_delays",
+        "description": "Average email processing time",
+        "measurement": "seconds",
+        "target_range": "1-10"
+      },
+      {
+        "metric": "user_complaints",
+        "description": "Simulated user frustration events",
+        "measurement": "count",
+        "target_range": "0-15"
+      }
+    ],
+    
+    "operational_metrics": [
+      {
+        "metric": "policy_violations",
+        "description": "Number of policy rule triggers",
+        "measurement": "count",
+        "target_range": "10-100"
+      },
+      {
+        "metric": "administrative_overhead",
+        "description": "Simulated admin actions required",
+        "measurement": "count",
+        "target_range": "5-50"
+      },
+      {
+        "metric": "system_performance",
+        "description": "Email processing performance impact",
+        "measurement": "percentage",
+        "target_range": "90-100%"
+      }
+    ]
+  },
+  
+  "test_scenarios": [
+    {
+      "name": "legitimate_business_emails",
+      "description": "Normal business communications",
+      "email_types": [
+        "internal_communications",
+        "external_partnerships",
+        "customer_correspondence",
+        "vendor_communications"
+      ],
+      "expected_behavior": "should_deliver"
+    },
+    
+    {
+      "name": "suspicious_but_legitimate",
+      "description": "Legitimate emails with suspicious characteristics",
+      "email_types": [
+        "urgent_business_requests",
+        "financial_notifications",
+        "security_alerts",
+        "system_notifications"
+      ],
+      "expected_behavior": "may_quarantine"
+    },
+    
+    {
+      "name": "obvious_phishing",
+      "description": "Clear phishing attempts",
+      "email_types": [
+        "nigerian_prince_scams",
+        "lottery_winners",
+        "fake_bank_notifications",
+        "obvious_malware"
+      ],
+      "expected_behavior": "should_block"
+    },
+    
+    {
+      "name": "sophisticated_attacks",
+      "description": "Advanced targeted attacks",
+      "email_types": [
+        "spear_phishing",
+        "business_email_compromise",
+        "advanced_malware",
+        "social_engineering"
+      ],
+      "expected_behavior": "should_detect"
+    }
+  ],
+  
+  "analysis_framework": {
+    "comparative_analysis": {
+      "security_vs_usability": {
+        "description": "Trade-off analysis between security and usability",
+        "metrics": ["blocked_attacks", "false_positives", "user_satisfaction"]
+      },
+      
+      "cost_benefit_analysis": {
+        "description": "Analysis of security investment vs. risk reduction",
+        "metrics": ["administrative_overhead", "successful_attacks", "business_impact"]
+      },
+      
+      "policy_optimization": {
+        "description": "Recommendations for policy tuning",
+        "metrics": ["policy_violations", "detection_accuracy", "operational_efficiency"]
+      }
+    },
+    
+    "statistical_analysis": {
+      "confidence_intervals": "95%",
+      "sample_size": "100_steps_per_variant",
+      "significance_testing": "chi_square",
+      "correlation_analysis": "pearson"
+    }
+  },
+  
+  "monitoring": {
+    "metrics_collection": {
+      "policy_effectiveness": true,
+      "false_positive_rates": true,
+      "user_impact": true,
+      "system_performance": true,
+      "administrative_burden": true
+    },
+    
+    "real_time_comparison": {
+      "side_by_side_metrics": true,
+      "policy_impact_visualization": true,
+      "trend_analysis": true,
+      "anomaly_detection": true
+    },
+    
+    "reporting": {
+      "comparative_dashboard": true,
+      "policy_recommendations": true,
+      "optimization_suggestions": true,
+      "executive_summary": true
+    }
+  },
+  
+  "expected_outcomes": {
+    "policy_rankings": {
+      "security_effectiveness": ["maximum", "strict", "standard", "minimal"],
+      "usability_score": ["minimal", "standard", "strict", "maximum"],
+      "balanced_approach": ["standard", "strict", "minimal", "maximum"]
+    },
+    
+    "key_findings": [
+      "Security-usability trade-offs clearly demonstrated",
+      "Optimal policy depends on risk tolerance",
+      "False positives increase with security level",
+      "Administrative overhead varies significantly"
+    ],
+    
+    "recommendations": [
+      "Standard policy for most organizations",
+      "Strict policy for high-risk environments",
+      "Minimal policy only for low-risk scenarios",
+      "Maximum policy for critical infrastructure"
+    ]
+  },
+  
+  "educational_notes": {
+    "instructor_guidance": [
+      "Emphasize trade-off decisions",
+      "Highlight policy tuning importance",
+      "Discuss organizational risk tolerance",
+      "Explain optimization techniques"
+    ],
+    
+    "student_observations": [
+      "Compare blocking rates across policies",
+      "Notice false positive patterns",
+      "Track user impact differences",
+      "Observe administrative overhead"
+    ],
+    
+    "discussion_points": [
+      "What is the right balance for your organization?",
+      "How do you measure security policy success?",
+      "When should policies be adjusted?",
+      "What factors influence policy decisions?"
+    ]
+  }
+}

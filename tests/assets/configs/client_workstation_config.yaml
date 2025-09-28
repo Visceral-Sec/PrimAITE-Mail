@@ -1,0 +1,748 @@
+# Client Workstation Configuration
+# Comprehensive workstation setup for all user types in the email security demonstration
+# Includes file systems, applications, and security profiles following PrimAITE patterns
+
+# Client Workstation Configurations
+client_workstations:
+  
+  # ========== BLUE TEAM - SECURITY ANALYST ==========
+  security_workstation:
+    hostname: "security_workstation"
+    type: "computer"
+    ip_address: "192.168.1.10"
+    subnet: "corporate"
+    default_gateway: "192.168.1.1"
+    dns_server: "192.168.100.20"
+    
+    # User Profile
+    user_profile:
+      username: "security@demo.company.com"
+      display_name: "Security Analyst"
+      department: "IT Security"
+      role: "Security Analyst"
+      security_clearance: "admin"
+      security_awareness_level: "expert"
+    
+    # Applications Configuration
+    applications:
+      - type: "email-client"
+        name: "security_email_client"
+        username: "security@demo.company.com"
+        default_smtp_server: "192.168.100.10"
+        default_pop3_server: "192.168.100.10"
+        auto_start: true
+        security_monitoring: true
+        advanced_features:
+          - "header_analysis"
+          - "attachment_scanning"
+          - "threat_intelligence"
+          - "incident_response"
+        configuration:
+          check_interval: 300  # 5 minutes
+          enable_notifications: true
+          quarantine_access: true
+          admin_privileges: true
+      
+      - type: "security-monitor"
+        name: "email_security_monitor"
+        auto_start: true
+        monitoring_targets:
+          - "192.168.100.10"  # Mail server
+        alert_thresholds:
+          blocked_emails_per_hour: 10
+          suspicious_attachments_per_hour: 5
+          failed_connections_per_hour: 20
+      
+      - type: "log-analyzer"
+        name: "security_log_analyzer"
+        auto_start: false
+        log_sources:
+          - "/var/log/mail.log"
+          - "/var/log/security.log"
+          - "/var/log/firewall.log"
+    
+    # File System Configuration
+    file_system:
+      folders:
+        - name: "Security"
+          permissions: "rwx------"
+          files:
+            - name: "incident_response_playbook.pdf"
+              size: 2097152  # 2MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "confidential"
+            
+            - name: "threat_intelligence_report.docx"
+              size: 3145728  # 3MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "confidential"
+            
+            - name: "security_policies.pdf"
+              size: 1048576  # 1MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "internal"
+            
+            - name: "email_security_config.yaml"
+              size: 51200  # 50KB
+              health_state: "HEALTHY"
+              file_type: "configuration"
+              classification: "confidential"
+        
+        - name: "Logs"
+          permissions: "rwx------"
+          files:
+            - name: "security_events.log"
+              size: 5242880  # 5MB
+              health_state: "HEALTHY"
+              file_type: "log"
+              classification: "internal"
+            
+            - name: "email_analysis.log"
+              size: 2097152  # 2MB
+              health_state: "HEALTHY"
+              file_type: "log"
+              classification: "internal"
+        
+        - name: "Tools"
+          permissions: "rwx------"
+          files:
+            - name: "email_header_analyzer.py"
+              size: 102400  # 100KB
+              health_state: "HEALTHY"
+              file_type: "script"
+              classification: "internal"
+            
+            - name: "threat_detection_rules.json"
+              size: 256000  # 250KB
+              health_state: "HEALTHY"
+              file_type: "configuration"
+              classification: "confidential"
+
+  # ========== GREEN TEAM - ALICE (MARKETING MANAGER) ==========
+  alice_workstation:
+    hostname: "alice_workstation"
+    type: "computer"
+    ip_address: "192.168.1.20"
+    subnet: "corporate"
+    default_gateway: "192.168.1.1"
+    dns_server: "192.168.100.20"
+    
+    # User Profile
+    user_profile:
+      username: "alice@demo.company.com"
+      display_name: "Alice Marketing"
+      department: "Marketing"
+      role: "Marketing Manager"
+      security_clearance: "standard"
+      security_awareness_level: "medium"
+    
+    # Applications Configuration
+    applications:
+      - type: "email-client"
+        name: "alice_email_client"
+        username: "alice@demo.company.com"
+        default_smtp_server: "192.168.100.10"
+        default_pop3_server: "192.168.100.10"
+        auto_start: true
+        user_profile: "marketing_manager"
+        configuration:
+          check_interval: 600  # 10 minutes
+          enable_notifications: true
+          auto_download_attachments: true
+          signature: "Best regards,\nAlice\nMarketing Manager\nDemo Company"
+        
+        # Email behavior patterns
+        email_patterns:
+          send_probability: 0.6
+          retrieve_probability: 0.3
+          idle_probability: 0.1
+          external_communication: true
+          attachment_usage: "high"
+          newsletter_sending: true
+      
+      - type: "office-suite"
+        name: "marketing_office_suite"
+        auto_start: false
+        applications:
+          - "word_processor"
+          - "spreadsheet"
+          - "presentation"
+          - "email_designer"
+      
+      - type: "web-browser"
+        name: "marketing_browser"
+        auto_start: false
+        bookmarks:
+          - "company_website"
+          - "social_media_platforms"
+          - "marketing_tools"
+          - "analytics_dashboard"
+    
+    # File System Configuration
+    file_system:
+      folders:
+        - name: "Marketing"
+          permissions: "rwxr--r--"
+          files:
+            - name: "newsletter_template_q1.docx"
+              size: 1048576  # 1MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "internal"
+            
+            - name: "marketing_campaign_2024.pptx"
+              size: 5242880  # 5MB
+              health_state: "HEALTHY"
+              file_type: "presentation"
+              classification: "internal"
+            
+            - name: "customer_database.xlsx"
+              size: 8388608  # 8MB
+              health_state: "HEALTHY"
+              file_type: "spreadsheet"
+              classification: "confidential"
+            
+            - name: "brand_guidelines.pdf"
+              size: 3145728  # 3MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "internal"
+            
+            - name: "marketing_budget_2024.xlsx"
+              size: 1572864  # 1.5MB
+              health_state: "HEALTHY"
+              file_type: "spreadsheet"
+              classification: "confidential"
+        
+        - name: "Campaigns"
+          permissions: "rwxr--r--"
+          files:
+            - name: "product_launch_materials.zip"
+              size: 15728640  # 15MB
+              health_state: "HEALTHY"
+              file_type: "archive"
+              classification: "internal"
+            
+            - name: "social_media_content.pdf"
+              size: 2097152  # 2MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "internal"
+        
+        - name: "Downloads"
+          permissions: "rwxr--r--"
+          files:
+            - name: "marketing_report_template.docx"
+              size: 524288  # 512KB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "public"
+
+  # ========== GREEN TEAM - BOB (DEVELOPER) ==========
+  bob_workstation:
+    hostname: "bob_workstation"
+    type: "computer"
+    ip_address: "192.168.1.30"
+    subnet: "corporate"
+    default_gateway: "192.168.1.1"
+    dns_server: "192.168.100.20"
+    
+    # User Profile
+    user_profile:
+      username: "bob@demo.company.com"
+      display_name: "Bob Developer"
+      department: "Engineering"
+      role: "Senior Developer"
+      security_clearance: "standard"
+      security_awareness_level: "high"
+    
+    # Applications Configuration
+    applications:
+      - type: "email-client"
+        name: "bob_email_client"
+        username: "bob@demo.company.com"
+        default_smtp_server: "192.168.100.10"
+        default_pop3_server: "192.168.100.10"
+        auto_start: true
+        user_profile: "developer"
+        configuration:
+          check_interval: 900  # 15 minutes
+          enable_notifications: false  # Developers prefer less interruption
+          auto_download_attachments: false  # Security conscious
+          signature: "Best regards,\nBob\nSenior Developer\nDemo Company"
+        
+        # Email behavior patterns
+        email_patterns:
+          send_probability: 0.5
+          retrieve_probability: 0.4
+          idle_probability: 0.1
+          external_communication: false
+          attachment_usage: "medium"
+          technical_communication: true
+      
+      - type: "development-ide"
+        name: "code_editor"
+        auto_start: true
+        features:
+          - "syntax_highlighting"
+          - "version_control"
+          - "debugging"
+          - "code_review"
+      
+      - type: "terminal"
+        name: "developer_terminal"
+        auto_start: true
+        shell: "bash"
+      
+      - type: "web-browser"
+        name: "developer_browser"
+        auto_start: false
+        bookmarks:
+          - "documentation_sites"
+          - "code_repositories"
+          - "technical_forums"
+          - "api_references"
+    
+    # File System Configuration
+    file_system:
+      folders:
+        - name: "Development"
+          permissions: "rwx------"
+          files:
+            - name: "code_review_checklist.md"
+              size: 51200  # 50KB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "internal"
+            
+            - name: "technical_specification_v2.pdf"
+              size: 4194304  # 4MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "confidential"
+            
+            - name: "api_documentation.html"
+              size: 1048576  # 1MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "internal"
+            
+            - name: "database_schema.sql"
+              size: 256000  # 250KB
+              health_state: "HEALTHY"
+              file_type: "script"
+              classification: "confidential"
+        
+        - name: "Projects"
+          permissions: "rwx------"
+          files:
+            - name: "source_code_backup.tar.gz"
+              size: 20971520  # 20MB
+              health_state: "HEALTHY"
+              file_type: "archive"
+              classification: "confidential"
+            
+            - name: "test_results.xml"
+              size: 512000  # 500KB
+              health_state: "HEALTHY"
+              file_type: "data"
+              classification: "internal"
+            
+            - name: "deployment_scripts.zip"
+              size: 1048576  # 1MB
+              health_state: "HEALTHY"
+              file_type: "archive"
+              classification: "confidential"
+        
+        - name: "Documentation"
+          permissions: "rwxr--r--"
+          files:
+            - name: "system_architecture.pdf"
+              size: 2097152  # 2MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "internal"
+
+  # ========== GREEN TEAM - CHARLIE (EXECUTIVE ASSISTANT) ==========
+  charlie_workstation:
+    hostname: "charlie_workstation"
+    type: "computer"
+    ip_address: "192.168.1.40"
+    subnet: "corporate"
+    default_gateway: "192.168.1.1"
+    dns_server: "192.168.100.20"
+    
+    # User Profile
+    user_profile:
+      username: "charlie@demo.company.com"
+      display_name: "Charlie Assistant"
+      department: "Administration"
+      role: "Executive Assistant"
+      security_clearance: "standard"
+      security_awareness_level: "medium"
+    
+    # Applications Configuration
+    applications:
+      - type: "email-client"
+        name: "charlie_email_client"
+        username: "charlie@demo.company.com"
+        default_smtp_server: "192.168.100.10"
+        default_pop3_server: "192.168.100.10"
+        auto_start: true
+        user_profile: "executive_assistant"
+        configuration:
+          check_interval: 300  # 5 minutes - frequent checking
+          enable_notifications: true
+          auto_download_attachments: true
+          signature: "Best regards,\nCharlie\nExecutive Assistant\nDemo Company"
+        
+        # Email behavior patterns
+        email_patterns:
+          send_probability: 0.4
+          retrieve_probability: 0.5
+          idle_probability: 0.1
+          external_communication: true
+          attachment_usage: "high"
+          scheduling_communication: true
+          multi_recipient_emails: true
+      
+      - type: "calendar-application"
+        name: "executive_calendar"
+        auto_start: true
+        features:
+          - "meeting_scheduling"
+          - "reminder_notifications"
+          - "resource_booking"
+          - "travel_planning"
+      
+      - type: "office-suite"
+        name: "admin_office_suite"
+        auto_start: false
+        applications:
+          - "word_processor"
+          - "spreadsheet"
+          - "presentation"
+      
+      - type: "document-management"
+        name: "document_manager"
+        auto_start: false
+        features:
+          - "file_organization"
+          - "version_control"
+          - "sharing_permissions"
+    
+    # File System Configuration
+    file_system:
+      folders:
+        - name: "Administration"
+          permissions: "rwxr--r--"
+          files:
+            - name: "executive_calendar_2024.ics"
+              size: 204800  # 200KB
+              health_state: "HEALTHY"
+              file_type: "calendar"
+              classification: "confidential"
+            
+            - name: "meeting_schedules.xlsx"
+              size: 1572864  # 1.5MB
+              health_state: "HEALTHY"
+              file_type: "spreadsheet"
+              classification: "internal"
+            
+            - name: "company_policies_handbook.pdf"
+              size: 6291456  # 6MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "internal"
+            
+            - name: "travel_arrangements_template.docx"
+              size: 524288  # 512KB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "internal"
+            
+            - name: "expense_reports.xlsx"
+              size: 2097152  # 2MB
+              health_state: "HEALTHY"
+              file_type: "spreadsheet"
+              classification: "confidential"
+        
+        - name: "Documents"
+          permissions: "rwxr--r--"
+          files:
+            - name: "board_meeting_minutes.docx"
+              size: 1048576  # 1MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "confidential"
+            
+            - name: "vendor_contracts.pdf"
+              size: 3145728  # 3MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "confidential"
+            
+            - name: "employee_directory.xlsx"
+              size: 1048576  # 1MB
+              health_state: "HEALTHY"
+              file_type: "spreadsheet"
+              classification: "internal"
+        
+        - name: "Templates"
+          permissions: "rwxr--r--"
+          files:
+            - name: "meeting_invitation_template.html"
+              size: 51200  # 50KB
+              health_state: "HEALTHY"
+              file_type: "template"
+              classification: "internal"
+
+  # ========== GREEN TEAM - REMOTE WORKER ==========
+  remote_workstation:
+    hostname: "remote_workstation"
+    type: "computer"
+    ip_address: "192.168.50.10"
+    subnet: "remote_office"
+    default_gateway: "192.168.50.1"
+    dns_server: "192.168.100.20"
+    
+    # User Profile
+    user_profile:
+      username: "remote@demo.company.com"
+      display_name: "Remote Worker"
+      department: "Field Operations"
+      role: "Field Worker"
+      security_clearance: "limited"
+      security_awareness_level: "low"  # Potential security risk
+    
+    # Applications Configuration
+    applications:
+      - type: "email-client"
+        name: "remote_email_client"
+        username: "remote@demo.company.com"
+        default_smtp_server: "192.168.100.10"
+        default_pop3_server: "192.168.100.10"
+        auto_start: true
+        user_profile: "remote_worker"
+        configuration:
+          check_interval: 1800  # 30 minutes - infrequent checking
+          enable_notifications: true
+          auto_download_attachments: true  # Security risk
+          signature: "Regards,\nRemote Worker\nField Operations"
+        
+        # Email behavior patterns (potential security risks)
+        email_patterns:
+          send_probability: 0.3
+          retrieve_probability: 0.4
+          idle_probability: 0.3
+          external_communication: true
+          attachment_usage: "medium"
+          security_awareness: "low"
+          suspicious_link_clicking: true  # Security vulnerability
+      
+      - type: "web-browser"
+        name: "remote_browser"
+        auto_start: true
+        security_settings: "relaxed"  # Security risk
+        bookmarks:
+          - "company_portal"
+          - "personal_sites"
+          - "social_media"
+          - "file_sharing_sites"  # Potential risk
+      
+      - type: "file-sync"
+        name: "cloud_sync"
+        auto_start: true
+        sync_folders:
+          - "Work"
+          - "Downloads"
+        security_settings: "basic"  # Potential data leakage risk
+    
+    # File System Configuration
+    file_system:
+      folders:
+        - name: "Work"
+          permissions: "rwxrwxrwx"  # Overly permissive
+          files:
+            - name: "field_report_january.docx"
+              size: 1048576  # 1MB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "internal"
+            
+            - name: "client_contact_list.xlsx"
+              size: 524288  # 512KB
+              health_state: "HEALTHY"
+              file_type: "spreadsheet"
+              classification: "confidential"
+            
+            - name: "project_photos.zip"
+              size: 10485760  # 10MB
+              health_state: "HEALTHY"
+              file_type: "archive"
+              classification: "internal"
+        
+        - name: "Downloads"
+          permissions: "rwxrwxrwx"  # Security risk
+          files:
+            - name: "suspicious_invoice.pdf"
+              size: 1048576  # 1MB
+              health_state: "CORRUPTED"  # Potential malware
+              file_type: "document"
+              classification: "unknown"
+              security_flags:
+                - "suspicious_origin"
+                - "unsigned"
+                - "potential_malware"
+            
+            - name: "free_software_installer.exe"
+              size: 5242880  # 5MB
+              health_state: "CORRUPTED"  # Malware
+              file_type: "executable"
+              classification: "unknown"
+              security_flags:
+                - "unsigned_executable"
+                - "potential_malware"
+                - "downloaded_from_internet"
+            
+            - name: "personal_document.docx"
+              size: 256000  # 250KB
+              health_state: "HEALTHY"
+              file_type: "document"
+              classification: "personal"
+        
+        - name: "Personal"
+          permissions: "rwx------"
+          files:
+            - name: "personal_photos.zip"
+              size: 20971520  # 20MB
+              health_state: "HEALTHY"
+              file_type: "archive"
+              classification: "personal"
+
+# Application Templates and Configurations
+application_templates:
+  email_client:
+    base_configuration:
+      protocol_support:
+        - "SMTP"
+        - "POP3"
+        - "IMAP"
+      security_features:
+        - "attachment_scanning"
+        - "spam_filtering"
+        - "phishing_detection"
+      file_formats:
+        - "eml"
+        - "msg"
+        - "mbox"
+    
+    security_profiles:
+      admin:
+        attachment_restrictions: "strict"
+        external_email_warnings: true
+        header_analysis: true
+        threat_intelligence: true
+      
+      standard:
+        attachment_restrictions: "moderate"
+        external_email_warnings: true
+        header_analysis: false
+        threat_intelligence: false
+      
+      limited:
+        attachment_restrictions: "basic"
+        external_email_warnings: false
+        header_analysis: false
+        threat_intelligence: false
+
+# File System Security Policies
+file_system_policies:
+  classification_levels:
+    public:
+      permissions: "rwxr--r--"
+      encryption: false
+      backup: true
+    
+    internal:
+      permissions: "rwxr-----"
+      encryption: false
+      backup: true
+    
+    confidential:
+      permissions: "rwx------"
+      encryption: true
+      backup: true
+      access_logging: true
+    
+    restricted:
+      permissions: "rwx------"
+      encryption: true
+      backup: true
+      access_logging: true
+      approval_required: true
+
+# Security Monitoring Configuration
+security_monitoring:
+  file_integrity:
+    monitor_directories:
+      - "/home/*/Documents"
+      - "/home/*/Downloads"
+      - "/home/*/Work"
+    
+    alert_conditions:
+      - "file_corruption_detected"
+      - "unauthorized_file_access"
+      - "suspicious_file_creation"
+      - "malware_signature_match"
+  
+  application_monitoring:
+    monitor_applications:
+      - "email-client"
+      - "web-browser"
+      - "file-sync"
+    
+    alert_conditions:
+      - "suspicious_network_activity"
+      - "unauthorized_data_access"
+      - "malware_execution_attempt"
+      - "policy_violation"
+
+# Configuration Metadata
+metadata:
+  version: "1.0"
+  description: "Comprehensive client workstation configuration for email security demonstration"
+  created_date: "2025-01-27"
+  
+  workstation_types:
+    - name: "Security Workstation"
+      purpose: "Blue team security monitoring and incident response"
+      security_level: "high"
+    
+    - name: "Marketing Workstation"
+      purpose: "Green team marketing communications and campaigns"
+      security_level: "standard"
+    
+    - name: "Developer Workstation"
+      purpose: "Green team software development and technical communication"
+      security_level: "standard"
+    
+    - name: "Executive Assistant Workstation"
+      purpose: "Green team administrative and executive support"
+      security_level: "standard"
+    
+    - name: "Remote Workstation"
+      purpose: "Green team field operations with elevated security risks"
+      security_level: "limited"
+  
+  security_features:
+    - "Role-based file system permissions"
+    - "Application security profiles"
+    - "File integrity monitoring"
+    - "Classification-based access control"
+    - "Security event logging"
+    - "Malware simulation for testing"
+    - "Realistic user behavior patterns"

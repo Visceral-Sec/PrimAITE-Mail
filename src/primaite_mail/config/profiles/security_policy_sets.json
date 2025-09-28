@@ -1,0 +1,644 @@
+{
+  "security_policy_sets": {
+    "version": "1.0",
+    "description": "Predefined security policy configurations for different organizational needs",
+    "categories": ["permissive", "balanced", "restrictive", "specialized"],
+    
+    "permissive_policies": {
+      "startup_friendly": {
+        "name": "startup_friendly",
+        "description": "Minimal security restrictions for fast-moving startup environment",
+        "use_case": "Small organizations prioritizing speed and flexibility",
+        "security_level": "minimal",
+        "configuration": {
+          "email_security": {
+            "sender_blocking": {
+              "basic_blocked_senders": [
+                "phishing@attacker.com"
+              ],
+              "blocked_domains": [],
+              "dynamic_blocking": false
+            },
+            "ip_blocking": {
+              "blocked_ips": [],
+              "blocked_subnets": [],
+              "dynamic_blocking": false
+            },
+            "content_filtering": {
+              "quarantine_keywords": [
+                "urgent wire transfer"
+              ],
+              "advanced_pattern_matching": false
+            },
+            "attachment_security": {
+              "blocked_extensions": [".exe"],
+              "max_attachment_size_mb": 25,
+              "malware_scanning": false,
+              "quarantine_suspicious": false
+            },
+            "rate_limiting": {
+              "max_emails_per_hour": 1000,
+              "burst_threshold": 100,
+              "adaptive_limiting": false
+            }
+          }
+        },
+        "expected_characteristics": {
+          "usability": "excellent",
+          "security": "basic",
+          "false_positives": "minimal",
+          "administrative_overhead": "very_low"
+        }
+      },
+      
+      "development_environment": {
+        "name": "development_environment",
+        "description": "Relaxed policies for development and testing environments",
+        "use_case": "Non-production environments where security is less critical",
+        "security_level": "minimal",
+        "configuration": {
+          "email_security": {
+            "sender_blocking": {
+              "basic_blocked_senders": [],
+              "blocked_domains": [],
+              "dynamic_blocking": false
+            },
+            "ip_blocking": {
+              "blocked_ips": [],
+              "blocked_subnets": [],
+              "dynamic_blocking": false
+            },
+            "content_filtering": {
+              "quarantine_keywords": [],
+              "advanced_pattern_matching": false
+            },
+            "attachment_security": {
+              "blocked_extensions": [],
+              "max_attachment_size_mb": 50,
+              "malware_scanning": false,
+              "quarantine_suspicious": false
+            },
+            "rate_limiting": {
+              "max_emails_per_hour": 10000,
+              "burst_threshold": 1000,
+              "adaptive_limiting": false
+            }
+          }
+        },
+        "expected_characteristics": {
+          "usability": "maximum",
+          "security": "none",
+          "false_positives": "none",
+          "administrative_overhead": "none"
+        }
+      }
+    },
+    
+    "balanced_policies": {
+      "small_business": {
+        "name": "small_business",
+        "description": "Balanced security for small to medium businesses",
+        "use_case": "SMBs needing good security without complexity",
+        "security_level": "standard",
+        "configuration": {
+          "email_security": {
+            "sender_blocking": {
+              "basic_blocked_senders": [
+                "phishing@attacker.com",
+                "malware@badactor.net",
+                "spam@suspicious.org"
+              ],
+              "blocked_domains": [
+                "*@known-phishing.com",
+                "*@malicious-domain.net"
+              ],
+              "dynamic_blocking": true
+            },
+            "ip_blocking": {
+              "blocked_ips": [
+                "203.0.113.50"
+              ],
+              "blocked_subnets": [
+                "198.51.100.0/24"
+              ],
+              "dynamic_blocking": true
+            },
+            "content_filtering": {
+              "quarantine_keywords": [
+                "urgent wire transfer",
+                "verify your account",
+                "suspended account",
+                "click here immediately"
+              ],
+              "advanced_pattern_matching": true
+            },
+            "attachment_security": {
+              "blocked_extensions": [".exe", ".scr", ".bat", ".com", ".pif"],
+              "max_attachment_size_mb": 10,
+              "malware_scanning": true,
+              "quarantine_suspicious": true
+            },
+            "rate_limiting": {
+              "max_emails_per_hour": 200,
+              "burst_threshold": 20,
+              "adaptive_limiting": true
+            }
+          }
+        },
+        "expected_characteristics": {
+          "usability": "good",
+          "security": "good",
+          "false_positives": "low",
+          "administrative_overhead": "moderate"
+        }
+      },
+      
+      "enterprise_standard": {
+        "name": "enterprise_standard",
+        "description": "Standard enterprise security policies",
+        "use_case": "Large organizations with standard security requirements",
+        "security_level": "standard",
+        "configuration": {
+          "email_security": {
+            "sender_blocking": {
+              "basic_blocked_senders": [
+                "phishing@attacker.com",
+                "malware@badactor.net",
+                "spam@suspicious.org",
+                "noreply@phishing-site.com"
+              ],
+              "blocked_domains": [
+                "*@known-phishing.com",
+                "*@malicious-domain.net",
+                "*@fake-bank.com"
+              ],
+              "dynamic_blocking": true
+            },
+            "ip_blocking": {
+              "blocked_ips": [
+                "203.0.113.50",
+                "203.0.113.100"
+              ],
+              "blocked_subnets": [
+                "198.51.100.0/24",
+                "192.0.2.0/24"
+              ],
+              "dynamic_blocking": true
+            },
+            "content_filtering": {
+              "quarantine_keywords": [
+                "urgent wire transfer",
+                "verify your account",
+                "suspended account",
+                "click here immediately",
+                "confirm your identity",
+                "congratulations you have won"
+              ],
+              "advanced_pattern_matching": true
+            },
+            "attachment_security": {
+              "blocked_extensions": [".exe", ".scr", ".bat", ".com", ".pif", ".vbs"],
+              "max_attachment_size_mb": 5,
+              "malware_scanning": true,
+              "quarantine_suspicious": true,
+              "deep_inspection": true
+            },
+            "rate_limiting": {
+              "max_emails_per_hour": 100,
+              "burst_threshold": 10,
+              "adaptive_limiting": true
+            }
+          }
+        },
+        "expected_characteristics": {
+          "usability": "moderate",
+          "security": "high",
+          "false_positives": "moderate",
+          "administrative_overhead": "moderate"
+        }
+      }
+    },
+    
+    "restrictive_policies": {
+      "financial_services": {
+        "name": "financial_services",
+        "description": "Strict security for financial institutions",
+        "use_case": "Banks, credit unions, and financial service providers",
+        "security_level": "strict",
+        "configuration": {
+          "email_security": {
+            "sender_blocking": {
+              "basic_blocked_senders": [
+                "phishing@attacker.com",
+                "malware@badactor.net",
+                "spam@suspicious.org",
+                "noreply@phishing-site.com",
+                "admin@fake-bank.com"
+              ],
+              "blocked_domains": [
+                "*@known-phishing.com",
+                "*@malicious-domain.net",
+                "*@fake-bank.com",
+                "*@suspicious.org",
+                "*@phishing-site.com"
+              ],
+              "dynamic_blocking": true,
+              "reputation_filtering": true
+            },
+            "ip_blocking": {
+              "blocked_ips": [
+                "203.0.113.50",
+                "203.0.113.100",
+                "198.51.100.10"
+              ],
+              "blocked_subnets": [
+                "198.51.100.0/24",
+                "192.0.2.0/24",
+                "203.0.113.100/30"
+              ],
+              "dynamic_blocking": true,
+              "geographic_blocking": ["high_risk_countries"]
+            },
+            "content_filtering": {
+              "quarantine_keywords": [
+                "urgent wire transfer",
+                "verify your account",
+                "suspended account",
+                "click here immediately",
+                "confirm your identity",
+                "congratulations you have won",
+                "inheritance claim",
+                "nigerian prince",
+                "lottery winner",
+                "tax refund"
+              ],
+              "advanced_pattern_matching": true,
+              "financial_fraud_detection": true
+            },
+            "attachment_security": {
+              "blocked_extensions": [".exe", ".scr", ".bat", ".com", ".pif", ".vbs", ".js", ".jar"],
+              "max_attachment_size_mb": 2,
+              "malware_scanning": true,
+              "quarantine_suspicious": true,
+              "deep_inspection": true,
+              "sandbox_analysis": true
+            },
+            "rate_limiting": {
+              "max_emails_per_hour": 50,
+              "burst_threshold": 3,
+              "adaptive_limiting": true,
+              "strict_enforcement": true
+            }
+          }
+        },
+        "expected_characteristics": {
+          "usability": "limited",
+          "security": "very_high",
+          "false_positives": "moderate_to_high",
+          "administrative_overhead": "high"
+        }
+      },
+      
+      "healthcare": {
+        "name": "healthcare",
+        "description": "HIPAA-compliant security for healthcare organizations",
+        "use_case": "Hospitals, clinics, and healthcare providers",
+        "security_level": "strict",
+        "configuration": {
+          "email_security": {
+            "sender_blocking": {
+              "basic_blocked_senders": [
+                "phishing@attacker.com",
+                "malware@badactor.net",
+                "spam@suspicious.org",
+                "noreply@phishing-site.com"
+              ],
+              "blocked_domains": [
+                "*@known-phishing.com",
+                "*@malicious-domain.net",
+                "*@fake-medical.com",
+                "*@suspicious.org"
+              ],
+              "dynamic_blocking": true,
+              "medical_impersonation_detection": true
+            },
+            "ip_blocking": {
+              "blocked_ips": [
+                "203.0.113.50",
+                "203.0.113.100"
+              ],
+              "blocked_subnets": [
+                "198.51.100.0/24",
+                "192.0.2.0/24"
+              ],
+              "dynamic_blocking": true
+            },
+            "content_filtering": {
+              "quarantine_keywords": [
+                "urgent wire transfer",
+                "verify your account",
+                "suspended account",
+                "medical records",
+                "patient information",
+                "hipaa violation",
+                "health insurance"
+              ],
+              "advanced_pattern_matching": true,
+              "phi_detection": true
+            },
+            "attachment_security": {
+              "blocked_extensions": [".exe", ".scr", ".bat", ".com", ".pif", ".vbs"],
+              "max_attachment_size_mb": 3,
+              "malware_scanning": true,
+              "quarantine_suspicious": true,
+              "deep_inspection": true,
+              "phi_scanning": true
+            },
+            "rate_limiting": {
+              "max_emails_per_hour": 75,
+              "burst_threshold": 5,
+              "adaptive_limiting": true
+            },
+            "encryption": {
+              "require_encryption": true,
+              "phi_auto_encrypt": true
+            }
+          }
+        },
+        "expected_characteristics": {
+          "usability": "moderate",
+          "security": "very_high",
+          "false_positives": "moderate",
+          "administrative_overhead": "high"
+        }
+      },
+      
+      "government": {
+        "name": "government",
+        "description": "High-security policies for government agencies",
+        "use_case": "Federal, state, and local government organizations",
+        "security_level": "maximum",
+        "configuration": {
+          "email_security": {
+            "sender_blocking": {
+              "whitelist_mode": true,
+              "trusted_senders": [
+                "*@agency.gov",
+                "*@contractor-approved.com",
+                "security@microsoft.com",
+                "alerts@cisa.gov"
+              ],
+              "blocked_domains": ["*"],
+              "dynamic_blocking": true,
+              "threat_intelligence_integration": true
+            },
+            "ip_blocking": {
+              "whitelist_mode": true,
+              "trusted_ip_ranges": [
+                "192.168.0.0/16",
+                "10.0.0.0/8",
+                "government_approved_ranges"
+              ],
+              "dynamic_blocking": true,
+              "nation_state_blocking": true
+            },
+            "content_filtering": {
+              "quarantine_keywords": [
+                "classified",
+                "secret",
+                "confidential",
+                "urgent wire transfer",
+                "verify your account",
+                "suspended account"
+              ],
+              "advanced_pattern_matching": true,
+              "classification_detection": true,
+              "foreign_language_analysis": true
+            },
+            "attachment_security": {
+              "whitelist_mode": true,
+              "allowed_extensions": [".pdf", ".docx", ".xlsx", ".txt"],
+              "max_attachment_size_mb": 1,
+              "mandatory_scanning": true,
+              "quarantine_all_suspicious": true,
+              "classification_scanning": true
+            },
+            "rate_limiting": {
+              "max_emails_per_hour": 25,
+              "burst_threshold": 2,
+              "adaptive_limiting": true,
+              "strict_enforcement": true
+            },
+            "encryption": {
+              "mandatory_encryption": true,
+              "classification_based_encryption": true
+            }
+          }
+        },
+        "expected_characteristics": {
+          "usability": "very_limited",
+          "security": "maximum",
+          "false_positives": "high",
+          "administrative_overhead": "very_high"
+        }
+      }
+    },
+    
+    "specialized_policies": {
+      "educational_institution": {
+        "name": "educational_institution",
+        "description": "Balanced policies for schools and universities",
+        "use_case": "K-12 schools, colleges, and universities",
+        "security_level": "standard",
+        "configuration": {
+          "email_security": {
+            "sender_blocking": {
+              "basic_blocked_senders": [
+                "phishing@attacker.com",
+                "malware@badactor.net",
+                "spam@suspicious.org"
+              ],
+              "blocked_domains": [
+                "*@known-phishing.com",
+                "*@malicious-domain.net",
+                "*@fake-university.edu"
+              ],
+              "dynamic_blocking": true,
+              "educational_impersonation_detection": true
+            },
+            "ip_blocking": {
+              "blocked_ips": [
+                "203.0.113.50"
+              ],
+              "blocked_subnets": [
+                "198.51.100.0/24"
+              ],
+              "dynamic_blocking": true
+            },
+            "content_filtering": {
+              "quarantine_keywords": [
+                "urgent wire transfer",
+                "verify your account",
+                "student loan forgiveness",
+                "scholarship scam",
+                "tuition payment"
+              ],
+              "advanced_pattern_matching": true,
+              "educational_fraud_detection": true
+            },
+            "attachment_security": {
+              "blocked_extensions": [".exe", ".scr", ".bat", ".com"],
+              "max_attachment_size_mb": 15,
+              "malware_scanning": true,
+              "quarantine_suspicious": true,
+              "academic_content_filtering": false
+            },
+            "rate_limiting": {
+              "max_emails_per_hour": 150,
+              "burst_threshold": 15,
+              "adaptive_limiting": true,
+              "student_exceptions": true
+            }
+          }
+        },
+        "expected_characteristics": {
+          "usability": "good",
+          "security": "good",
+          "false_positives": "low",
+          "administrative_overhead": "moderate"
+        }
+      },
+      
+      "manufacturing": {
+        "name": "manufacturing",
+        "description": "Industrial security policies for manufacturing",
+        "use_case": "Manufacturing companies with operational technology",
+        "security_level": "strict",
+        "configuration": {
+          "email_security": {
+            "sender_blocking": {
+              "basic_blocked_senders": [
+                "phishing@attacker.com",
+                "malware@badactor.net",
+                "spam@suspicious.org",
+                "noreply@phishing-site.com"
+              ],
+              "blocked_domains": [
+                "*@known-phishing.com",
+                "*@malicious-domain.net",
+                "*@fake-supplier.com"
+              ],
+              "dynamic_blocking": true,
+              "supply_chain_verification": true
+            },
+            "ip_blocking": {
+              "blocked_ips": [
+                "203.0.113.50",
+                "203.0.113.100"
+              ],
+              "blocked_subnets": [
+                "198.51.100.0/24",
+                "192.0.2.0/24"
+              ],
+              "dynamic_blocking": true,
+              "industrial_threat_blocking": true
+            },
+            "content_filtering": {
+              "quarantine_keywords": [
+                "urgent wire transfer",
+                "verify your account",
+                "suspended account",
+                "industrial control",
+                "scada system",
+                "production line"
+              ],
+              "advanced_pattern_matching": true,
+              "industrial_espionage_detection": true
+            },
+            "attachment_security": {
+              "blocked_extensions": [".exe", ".scr", ".bat", ".com", ".pif", ".vbs"],
+              "max_attachment_size_mb": 5,
+              "malware_scanning": true,
+              "quarantine_suspicious": true,
+              "deep_inspection": true,
+              "industrial_malware_detection": true
+            },
+            "rate_limiting": {
+              "max_emails_per_hour": 75,
+              "burst_threshold": 8,
+              "adaptive_limiting": true
+            }
+          }
+        },
+        "expected_characteristics": {
+          "usability": "moderate",
+          "security": "high",
+          "false_positives": "moderate",
+          "administrative_overhead": "high"
+        }
+      }
+    }
+  },
+  
+  "policy_comparison_matrix": {
+    "security_levels": {
+      "minimal": {
+        "policies": ["startup_friendly", "development_environment"],
+        "characteristics": {
+          "blocking_rate": "5-15%",
+          "false_positive_rate": "0-2%",
+          "usability_score": "9-10",
+          "administrative_overhead": "1-2"
+        }
+      },
+      "standard": {
+        "policies": ["small_business", "enterprise_standard", "educational_institution"],
+        "characteristics": {
+          "blocking_rate": "25-45%",
+          "false_positive_rate": "2-8%",
+          "usability_score": "6-8",
+          "administrative_overhead": "3-5"
+        }
+      },
+      "strict": {
+        "policies": ["financial_services", "healthcare", "manufacturing"],
+        "characteristics": {
+          "blocking_rate": "45-70%",
+          "false_positive_rate": "5-15%",
+          "usability_score": "4-6",
+          "administrative_overhead": "6-8"
+        }
+      },
+      "maximum": {
+        "policies": ["government"],
+        "characteristics": {
+          "blocking_rate": "70-90%",
+          "false_positive_rate": "10-25%",
+          "usability_score": "2-4",
+          "administrative_overhead": "8-10"
+        }
+      }
+    }
+  },
+  
+  "policy_metadata": {
+    "version": "1.0",
+    "created_date": "2025-01-27",
+    "description": "Comprehensive security policy sets for different organizational types",
+    
+    "selection_guidelines": [
+      "Consider organizational risk tolerance",
+      "Evaluate regulatory requirements",
+      "Assess user technical sophistication",
+      "Balance security needs with usability",
+      "Account for administrative resources"
+    ],
+    
+    "customization_notes": [
+      "Policies can be mixed and matched",
+      "Individual settings can be fine-tuned",
+      "Industry-specific additions are recommended",
+      "Regular policy reviews and updates needed"
+    ]
+  }
+}

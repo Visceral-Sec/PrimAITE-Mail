@@ -1,0 +1,167 @@
+# Comprehensive demonstration test configuration
+# This configuration supports all demonstration scenarios and testing requirements
+
+simulation:
+  network:
+    nodes:
+      # DMZ Network - Email Infrastructure
+      mail_server:
+        hostname: "mail_server"
+        type: "computer"
+        ip_address: "192.168.100.10"
+        default_gateway: "192.168.100.1"
+        services:
+          - type: "smtp-server"
+            domain: "demo.company.com"
+            max_message_size: 10485760  # 10MB
+            require_auth: false
+            enable_security_logging: true
+            # Initial security policies for testing
+            blocked_senders:
+              - "phishing@attacker.com"
+              - "malware@badactor.net"
+            blocked_ips:
+              - "203.0.113.50"      # Single malicious IP
+              - "198.51.100.0/24"   # Malicious subnet
+          - type: "pop3-server"
+            domain: "demo.company.com"
+            require_auth: false
+
+      dns_server:
+        hostname: "dns_server"
+        type: "computer"
+        ip_address: "192.168.100.20"
+        default_gateway: "192.168.100.1"
+        services:
+          - type: "dns-server"
+            domain: "demo.company.com"
+
+      # Corporate Network - Green Team Users
+      alice_workstation:
+        hostname: "alice_workstation"
+        type: "computer"
+        ip_address: "192.168.1.20"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "alice@demo.company.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+        file_system:
+          folders:
+            - name: "Documents"
+              files:
+                - name: "marketing_report.pdf"
+                  size: 2048576  # 2MB
+                  health_state: "HEALTHY"
+                - name: "newsletter_template.docx"
+                  size: 1048576  # 1MB
+                  health_state: "HEALTHY"
+
+      bob_workstation:
+        hostname: "bob_workstation"
+        type: "computer"
+        ip_address: "192.168.1.30"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "bob@demo.company.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+        file_system:
+          folders:
+            - name: "Development"
+              files:
+                - name: "code_review.txt"
+                  size: 512000  # 500KB
+                  health_state: "HEALTHY"
+                - name: "technical_spec.pdf"
+                  size: 3145728  # 3MB
+                  health_state: "HEALTHY"
+
+      charlie_workstation:
+        hostname: "charlie_workstation"
+        type: "computer"
+        ip_address: "192.168.1.40"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "charlie@demo.company.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+        file_system:
+          folders:
+            - name: "Administration"
+              files:
+                - name: "meeting_schedule.xlsx"
+                  size: 1572864  # 1.5MB
+                  health_state: "HEALTHY"
+                - name: "company_policy.pdf"
+                  size: 4194304  # 4MB
+                  health_state: "HEALTHY"
+
+      # Blue Team - Security Operations
+      security_workstation:
+        hostname: "security_workstation"
+        type: "computer"
+        ip_address: "192.168.1.10"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "security@demo.company.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+
+      # Remote Network - Potential Security Risk
+      remote_workstation:
+        hostname: "remote_workstation"
+        type: "computer"
+        ip_address: "192.168.50.10"
+        default_gateway: "192.168.50.1"
+        applications:
+          - type: "email-client"
+            username: "remote@demo.company.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+
+      # External Network - Red Team Attackers
+      attacker_system:
+        hostname: "attacker_system"
+        type: "computer"
+        ip_address: "203.0.113.20"
+        default_gateway: "203.0.113.1"
+        applications:
+          - type: "email-client"
+            username: "legitimate@external.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+        file_system:
+          folders:
+            - name: "Malware"
+              files:
+                - name: "trojan.exe"
+                  size: 2097152  # 2MB
+                  health_state: "CORRUPTED"  # Simulates malware
+                - name: "phishing_template.html"
+                  size: 51200  # 50KB
+                  health_state: "CORRUPTED"
+
+      blocked_attacker:
+        hostname: "blocked_attacker"
+        type: "computer"
+        ip_address: "203.0.113.50"  # This IP is pre-blocked
+        default_gateway: "203.0.113.1"
+        applications:
+          - type: "email-client"
+            username: "blocked@attacker.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+
+# This configuration provides:
+# 1. Complete multi-network topology for realistic scenarios
+# 2. All agent types (green, blue, red team)
+# 3. Pre-configured security policies for testing
+# 4. File systems with realistic documents and simulated malware
+# 5. Both legitimate and blocked external systems
+# 6. Comprehensive email infrastructure (SMTP, POP3, DNS)
+# 7. Support for all demonstration scenarios in the notebook

@@ -1,0 +1,13 @@
+primaite
+
+[dev]
+pre-commit==2.20.0
+pytest==7.2.0
+pytest-xdist==3.3.1
+pytest-cov==4.0.0
+pytest-flake8==1.1.1
+setuptools==75.6.0
+Sphinx==7.1.2
+wheel==0.38.4
+nbsphinx==0.9.4
+nbmake==1.5.4

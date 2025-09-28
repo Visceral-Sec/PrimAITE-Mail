@@ -1,0 +1,118 @@
+{
+  "name": "baseline_operations",
+  "description": "Baseline email operations scenario demonstrating normal traffic patterns without threats",
+  "duration_steps": 50,
+  "learning_objectives": [
+    "Understand normal email traffic patterns",
+    "Observe green team agent behaviors",
+    "Establish baseline metrics for comparison",
+    "Learn email system monitoring basics"
+  ],
+  "network_config": "comprehensive_email_topology.yaml",
+  "agent_configs": {
+    "alice": {
+      "behavior_patterns": {
+        "send_probability": 0.3,
+        "retrieve_probability": 0.4,
+        "attachment_probability": 0.2
+      }
+    },
+    "bob": {
+      "behavior_patterns": {
+        "send_probability": 0.2,
+        "retrieve_probability": 0.5,
+        "attachment_probability": 0.1
+      }
+    },
+    "charlie": {
+      "behavior_patterns": {
+        "send_probability": 0.4,
+        "retrieve_probability": 0.3,
+        "attachment_probability": 0.3
+      }
+    },
+    "remote_user": {
+      "behavior_patterns": {
+        "send_probability": 0.1,
+        "retrieve_probability": 0.2,
+        "attachment_probability": 0.05
+      }
+    }
+  },
+  "security_policies": {
+    "blocked_senders": [],
+    "blocked_ips": [],
+    "attachment_restrictions": {
+      "max_size_mb": 25,
+      "allowed_types": [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt"]
+    }
+  },
+  "steps": [
+    {
+      "step_number": 0,
+      "description": "Initialize email system and agents",
+      "agents_to_act": ["alice", "bob", "charlie", "remote_user"],
+      "pause_after": true,
+      "analysis_points": [
+        "Verify all agents are initialized",
+        "Check email server status",
+        "Confirm network connectivity"
+      ],
+      "expected_outcomes": [
+        "All agents successfully initialized",
+        "Email services running",
+        "No security events"
+      ]
+    },
+    {
+      "step_number": 10,
+      "description": "First wave of normal email activity",
+      "agents_to_act": ["alice", "bob"],
+      "pause_after": false,
+      "analysis_points": [
+        "Monitor email send/receive patterns",
+        "Check attachment handling",
+        "Verify no security alerts"
+      ],
+      "expected_outcomes": [
+        "Successful email delivery",
+        "Normal attachment processing",
+        "Clean security logs"
+      ]
+    },
+    {
+      "step_number": 25,
+      "description": "Mid-scenario checkpoint - peak activity",
+      "agents_to_act": ["alice", "bob", "charlie"],
+      "pause_after": true,
+      "analysis_points": [
+        "Analyze traffic volume patterns",
+        "Review system performance",
+        "Check mailbox utilization"
+      ],
+      "expected_outcomes": [
+        "Sustained email traffic",
+        "Good system performance",
+        "Balanced mailbox usage"
+      ]
+    },
+    {
+      "step_number": 40,
+      "description": "Remote user activity simulation",
+      "agents_to_act": ["remote_user"],
+      "pause_after": false,
+      "analysis_points": [
+        "Monitor remote access patterns",
+        "Check authentication logs",
+        "Verify security compliance"
+      ],
+      "expected_outcomes": [
+        "Successful remote email access",
+        "Clean authentication logs",
+        "No security violations"
+      ]
+    }
+  ],
+  "analysis_checkpoints": [0, 10, 25, 40, 49],
+  "reset_points": [25]
+}

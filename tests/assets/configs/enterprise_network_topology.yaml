@@ -1,0 +1,556 @@
+# Enterprise Network Topology Configuration
+# Multi-network architecture for comprehensive email security demonstration
+# Includes Internet, DMZ, Corporate, and Remote Office networks with proper routing and firewalls
+
+simulation:
+  network:
+    # Network topology with multiple subnets and routing
+    subnets:
+      # Internet/External Network
+      internet:
+        network: "203.0.113.0/24"
+        gateway: "203.0.113.1"
+        description: "External Internet network for attackers and external services"
+      
+      # DMZ Network - Email and web infrastructure
+      dmz:
+        network: "192.168.100.0/24"
+        gateway: "192.168.100.1"
+        description: "DMZ network hosting email and web services"
+      
+      # Corporate Network - Internal users and security
+      corporate:
+        network: "192.168.1.0/24"
+        gateway: "192.168.1.1"
+        description: "Corporate internal network for employees and security team"
+      
+      # Remote Office Network
+      remote_office:
+        network: "192.168.50.0/24"
+        gateway: "192.168.50.1"
+        description: "Remote office network for field workers"
+
+    # Network routing configuration
+    routing:
+      # Internet to DMZ routing
+      - source: "203.0.113.0/24"
+        destination: "192.168.100.0/24"
+        gateway: "192.168.100.1"
+        interface: "dmz_firewall"
+      
+      # DMZ to Corporate routing
+      - source: "192.168.100.0/24"
+        destination: "192.168.1.0/24"
+        gateway: "192.168.1.1"
+        interface: "corporate_firewall"
+      
+      # DMZ to Remote Office routing
+      - source: "192.168.100.0/24"
+        destination: "192.168.50.0/24"
+        gateway: "192.168.50.1"
+        interface: "remote_firewall"
+
+    nodes:
+      # ========== INTERNET/EXTERNAL NETWORK ==========
+      
+      # External DNS Server (Public)
+      external_dns:
+        hostname: "external_dns"
+        type: "computer"
+        ip_address: "8.8.8.8"
+        subnet: "internet"
+        default_gateway: "203.0.113.1"
+        services:
+          - type: "dns-server"
+            domain: "public.dns.com"
+            authoritative: false
+            recursive: true
+
+      # C2 Command and Control Server
+      c2_server:
+        hostname: "c2_server"
+        type: "computer"
+        ip_address: "203.0.113.10"
+        subnet: "internet"
+        default_gateway: "203.0.113.1"
+        services:
+          - type: "web-server"
+            port: 80
+            ssl_enabled: false
+            document_root: "/var/www/c2"
+        file_system:
+          folders:
+            - name: "c2_commands"
+              files:
+                - name: "beacon.php"
+                  size: 4096
+                  health_state: "CORRUPTED"  # Malicious C2 script
+                - name: "exfiltrate.py"
+                  size: 8192
+                  health_state: "CORRUPTED"  # Data exfiltration tool
+
+      # External Attacker Mail System
+      attacker_mail:
+        hostname: "attacker_mail"
+        type: "computer"
+        ip_address: "203.0.113.20"
+        subnet: "internet"
+        default_gateway: "203.0.113.1"
+        applications:
+          - type: "email-client"
+            username: "attacker@malicious.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+        file_system:
+          folders:
+            - name: "Phishing"
+              files:
+                - name: "invoice_malware.pdf"
+                  size: 2097152  # 2MB
+                  health_state: "CORRUPTED"  # Malicious attachment
+                - name: "credential_harvester.html"
+                  size: 51200  # 50KB
+                  health_state: "CORRUPTED"  # Phishing page
+                - name: "trojan_dropper.exe"
+                  size: 5242880  # 5MB
+                  health_state: "CORRUPTED"  # Malware payload
+
+      # Blocked Attacker (for testing IP blocking)
+      blocked_attacker:
+        hostname: "blocked_attacker"
+        type: "computer"
+        ip_address: "203.0.113.50"
+        subnet: "internet"
+        default_gateway: "203.0.113.1"
+        applications:
+          - type: "email-client"
+            username: "blocked@badactor.net"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+
+      # ========== DMZ NETWORK ==========
+      
+      # DMZ Firewall
+      dmz_firewall:
+        hostname: "dmz_firewall"
+        type: "firewall"
+        ip_address: "192.168.100.1"
+        subnet: "dmz"
+        interfaces:
+          - name: "external"
+            ip_address: "203.0.113.1"
+            subnet: "internet"
+          - name: "internal"
+            ip_address: "192.168.100.1"
+            subnet: "dmz"
+        firewall_rules:
+          # Allow SMTP traffic to mail server
+          - rule_id: 1
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "any"
+            destination: "192.168.100.10"
+            port: 25
+            description: "Allow SMTP to mail server"
+          
+          # Allow POP3 traffic to mail server
+          - rule_id: 2
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "192.168.1.0/24"
+            destination: "192.168.100.10"
+            port: 110
+            description: "Allow POP3 from corporate network"
+          
+          # Allow DNS queries
+          - rule_id: 3
+            action: "ALLOW"
+            protocol: "UDP"
+            source: "any"
+            destination: "192.168.100.20"
+            port: 53
+            description: "Allow DNS queries"
+          
+          # Block known malicious IPs
+          - rule_id: 4
+            action: "DENY"
+            protocol: "any"
+            source: "203.0.113.50"
+            destination: "any"
+            port: "any"
+            description: "Block known malicious IP"
+
+      # Mail Server (SMTP/POP3)
+      mail_server:
+        hostname: "mail_server"
+        type: "computer"
+        ip_address: "192.168.100.10"
+        subnet: "dmz"
+        default_gateway: "192.168.100.1"
+        services:
+          - type: "smtp-server"
+            domain: "demo.company.com"
+            port: 25
+            max_message_size: 10485760  # 10MB
+            max_attachment_size: 5242880  # 5MB
+            require_auth: false
+            enable_security_logging: true
+            enable_attachment_scanning: true
+            # Baseline security policies
+            blocked_senders:
+              - "phishing@attacker.com"
+              - "malware@badactor.net"
+              - "spam@suspicious.org"
+              - "*@known-phishing.com"  # Wildcard domain blocking
+            blocked_ips:
+              - "203.0.113.50"      # Single malicious IP
+              - "198.51.100.0/24"   # Malicious subnet
+              - "192.0.2.0/24"      # Another test malicious subnet
+            quarantine_keywords:
+              - "urgent wire transfer"
+              - "click here immediately"
+              - "verify your account"
+              - "suspended account"
+            attachment_restrictions:
+              blocked_extensions:
+                - ".exe"
+                - ".scr"
+                - ".bat"
+                - ".com"
+                - ".pif"
+              max_size_mb: 5
+              scan_for_malware: true
+          
+          - type: "pop3-server"
+            domain: "demo.company.com"
+            port: 110
+            require_auth: false
+            max_connections: 100
+
+      # DNS Server
+      dns_server:
+        hostname: "dns_server"
+        type: "computer"
+        ip_address: "192.168.100.20"
+        subnet: "dmz"
+        default_gateway: "192.168.100.1"
+        services:
+          - type: "dns-server"
+            domain: "demo.company.com"
+            port: 53
+            authoritative: true
+            recursive: true
+            # DNS records for the domain
+            records:
+              - type: "A"
+                name: "mail.demo.company.com"
+                value: "192.168.100.10"
+              - type: "MX"
+                name: "demo.company.com"
+                value: "mail.demo.company.com"
+                priority: 10
+              - type: "A"
+                name: "www.demo.company.com"
+                value: "192.168.100.30"
+
+      # Web Server (for completeness)
+      web_server:
+        hostname: "web_server"
+        type: "computer"
+        ip_address: "192.168.100.30"
+        subnet: "dmz"
+        default_gateway: "192.168.100.1"
+        services:
+          - type: "web-server"
+            port: 80
+            ssl_enabled: true
+            ssl_port: 443
+            document_root: "/var/www/html"
+
+      # ========== CORPORATE NETWORK ==========
+      
+      # Corporate Firewall
+      corporate_firewall:
+        hostname: "corporate_firewall"
+        type: "firewall"
+        ip_address: "192.168.1.1"
+        subnet: "corporate"
+        interfaces:
+          - name: "dmz"
+            ip_address: "192.168.100.2"
+            subnet: "dmz"
+          - name: "corporate"
+            ip_address: "192.168.1.1"
+            subnet: "corporate"
+        firewall_rules:
+          # Allow outbound email traffic
+          - rule_id: 1
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "192.168.1.0/24"
+            destination: "192.168.100.10"
+            port: 25
+            description: "Allow SMTP to mail server"
+          
+          - rule_id: 2
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "192.168.1.0/24"
+            destination: "192.168.100.10"
+            port: 110
+            description: "Allow POP3 to mail server"
+          
+          # Allow DNS queries
+          - rule_id: 3
+            action: "ALLOW"
+            protocol: "UDP"
+            source: "192.168.1.0/24"
+            destination: "192.168.100.20"
+            port: 53
+            description: "Allow DNS queries"
+          
+          # Block direct internet access (force through DMZ)
+          - rule_id: 4
+            action: "DENY"
+            protocol: "any"
+            source: "192.168.1.0/24"
+            destination: "203.0.113.0/24"
+            port: "any"
+            description: "Block direct internet access"
+
+      # Blue Team - Security Analyst Workstation
+      security_workstation:
+        hostname: "security_workstation"
+        type: "computer"
+        ip_address: "192.168.1.10"
+        subnet: "corporate"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "security@demo.company.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+            security_monitoring: true
+        file_system:
+          folders:
+            - name: "Security"
+              files:
+                - name: "incident_response_plan.pdf"
+                  size: 1048576  # 1MB
+                  health_state: "HEALTHY"
+                - name: "threat_intelligence.xlsx"
+                  size: 2097152  # 2MB
+                  health_state: "HEALTHY"
+                - name: "security_policies.docx"
+                  size: 512000  # 500KB
+                  health_state: "HEALTHY"
+
+      # Alice - Marketing Manager Workstation
+      alice_workstation:
+        hostname: "alice_workstation"
+        type: "computer"
+        ip_address: "192.168.1.20"
+        subnet: "corporate"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "alice@demo.company.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+            user_profile: "marketing_manager"
+        file_system:
+          folders:
+            - name: "Marketing"
+              files:
+                - name: "newsletter_template.docx"
+                  size: 1048576  # 1MB
+                  health_state: "HEALTHY"
+                - name: "marketing_report_q4.pdf"
+                  size: 2048576  # 2MB
+                  health_state: "HEALTHY"
+                - name: "customer_database.xlsx"
+                  size: 5242880  # 5MB
+                  health_state: "HEALTHY"
+                - name: "brand_guidelines.pdf"
+                  size: 3145728  # 3MB
+                  health_state: "HEALTHY"
+
+      # Bob - Developer Workstation
+      bob_workstation:
+        hostname: "bob_workstation"
+        type: "computer"
+        ip_address: "192.168.1.30"
+        subnet: "corporate"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "bob@demo.company.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+            user_profile: "developer"
+        file_system:
+          folders:
+            - name: "Development"
+              files:
+                - name: "code_review_checklist.txt"
+                  size: 51200  # 50KB
+                  health_state: "HEALTHY"
+                - name: "technical_specification.pdf"
+                  size: 3145728  # 3MB
+                  health_state: "HEALTHY"
+                - name: "source_code_backup.zip"
+                  size: 10485760  # 10MB
+                  health_state: "HEALTHY"
+                - name: "api_documentation.html"
+                  size: 1048576  # 1MB
+                  health_state: "HEALTHY"
+
+      # Charlie - Executive Assistant Workstation
+      charlie_workstation:
+        hostname: "charlie_workstation"
+        type: "computer"
+        ip_address: "192.168.1.40"
+        subnet: "corporate"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "charlie@demo.company.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+            user_profile: "executive_assistant"
+        file_system:
+          folders:
+            - name: "Administration"
+              files:
+                - name: "meeting_schedules.xlsx"
+                  size: 1572864  # 1.5MB
+                  health_state: "HEALTHY"
+                - name: "company_policies.pdf"
+                  size: 4194304  # 4MB
+                  health_state: "HEALTHY"
+                - name: "executive_calendar.ics"
+                  size: 102400  # 100KB
+                  health_state: "HEALTHY"
+                - name: "travel_arrangements.docx"
+                  size: 524288  # 512KB
+                  health_state: "HEALTHY"
+
+      # ========== REMOTE OFFICE NETWORK ==========
+      
+      # Remote Office Firewall
+      remote_firewall:
+        hostname: "remote_firewall"
+        type: "firewall"
+        ip_address: "192.168.50.1"
+        subnet: "remote_office"
+        interfaces:
+          - name: "dmz"
+            ip_address: "192.168.100.3"
+            subnet: "dmz"
+          - name: "remote"
+            ip_address: "192.168.50.1"
+            subnet: "remote_office"
+        firewall_rules:
+          # Allow email traffic (less restrictive for remote workers)
+          - rule_id: 1
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "192.168.50.0/24"
+            destination: "192.168.100.10"
+            port: 25
+            description: "Allow SMTP to mail server"
+          
+          - rule_id: 2
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "192.168.50.0/24"
+            destination: "192.168.100.10"
+            port: 110
+            description: "Allow POP3 to mail server"
+          
+          # Allow web access (potential security risk)
+          - rule_id: 3
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "192.168.50.0/24"
+            destination: "any"
+            port: 80
+            description: "Allow HTTP access"
+          
+          - rule_id: 4
+            action: "ALLOW"
+            protocol: "TCP"
+            source: "192.168.50.0/24"
+            destination: "any"
+            port: 443
+            description: "Allow HTTPS access"
+
+      # Remote User Workstation
+      remote_workstation:
+        hostname: "remote_workstation"
+        type: "computer"
+        ip_address: "192.168.50.10"
+        subnet: "remote_office"
+        default_gateway: "192.168.50.1"
+        applications:
+          - type: "email-client"
+            username: "remote@demo.company.com"
+            default_smtp_server: "192.168.100.10"
+            auto_start: true
+            user_profile: "remote_worker"
+            security_awareness: "low"  # Potential security risk
+        file_system:
+          folders:
+            - name: "Work"
+              files:
+                - name: "field_report.docx"
+                  size: 1048576  # 1MB
+                  health_state: "HEALTHY"
+                - name: "client_data.xlsx"
+                  size: 2097152  # 2MB
+                  health_state: "HEALTHY"
+            - name: "Downloads"
+              files:
+                - name: "suspicious_file.exe"
+                  size: 1048576  # 1MB
+                  health_state: "CORRUPTED"  # Potential malware from web browsing
+
+# Configuration metadata
+metadata:
+  version: "1.0"
+  description: "Enterprise network topology for comprehensive email security demonstration"
+  created_date: "2025-01-27"
+  networks:
+    - name: "Internet"
+      subnet: "203.0.113.0/24"
+      purpose: "External attackers and public services"
+    - name: "DMZ"
+      subnet: "192.168.100.0/24"
+      purpose: "Email and web infrastructure"
+    - name: "Corporate"
+      subnet: "192.168.1.0/24"
+      purpose: "Internal users and security team"
+    - name: "Remote Office"
+      subnet: "192.168.50.0/24"
+      purpose: "Remote workers with elevated risk"
+  
+  security_features:
+    - "Multi-layer firewall protection"
+    - "Email security policies (sender/IP blocking)"
+    - "Attachment scanning and restrictions"
+    - "Network segmentation"
+    - "DNS security"
+    - "Baseline security monitoring"
+  
+  agent_types:
+    green_team:
+      - "Alice (Marketing Manager)"
+      - "Bob (Developer)"
+      - "Charlie (Executive Assistant)"
+      - "Remote Worker"
+    blue_team:
+      - "Security Analyst"
+    red_team:
+      - "External Attacker"
+      - "C2 Server"
+      - "Blocked Attacker"

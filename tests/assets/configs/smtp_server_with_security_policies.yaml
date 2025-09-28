@@ -1,0 +1,47 @@
+# Example SMTP server configuration with security policies
+# This demonstrates the configuration support for initial security policies
+
+simulation:
+  network:
+    nodes:
+      mail_server:
+        hostname: "mail_server"
+        type: "computer"
+        ip_address: "192.168.1.10"
+        default_gateway: "192.168.1.1"
+        services:
+          - type: "smtp-server"
+            domain: "company.com"
+            max_message_size: 10485760  # 10MB
+            require_auth: false
+            # Security policy configuration
+            blocked_senders:
+              - "malicious@attacker.com"
+              - "spam@badactor.net"
+              - "phishing@fake-bank.com"
+              - "scammer@fraudulent.org"
+            blocked_ips:
+              - "192.168.100.50"    # Single malicious IP
+              - "10.0.0.0/8"        # Block entire private range
+              - "172.16.0.0/16"     # Block another private range
+              - "203.0.113.0/24"    # Block test network range
+            enable_security_logging: true
+      
+      client_pc:
+        hostname: "client_pc"
+        type: "computer"
+        ip_address: "192.168.1.20"
+        default_gateway: "192.168.1.1"
+        applications:
+          - type: "email-client"
+            username: "user@company.com"
+            default_smtp_server: "192.168.1.10"
+            auto_start: true
+
+# This configuration demonstrates:
+# 1. SMTP server with pre-configured blocked senders and IPs
+# 2. Email addresses are automatically normalized to lowercase
+# 3. CIDR ranges are supported for IP blocking
+# 4. Security logging is enabled by default
+# 5. The server will reject emails from blocked senders
+# 6. The server will refuse connections from blocked IPs

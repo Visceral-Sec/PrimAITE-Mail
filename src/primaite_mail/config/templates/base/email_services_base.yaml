@@ -1,0 +1,357 @@
+# Base Email Services Configuration Template
+# Modular email infrastructure setup with SMTP, POP3, and DNS services
+# This template provides the foundation for all email service configurations
+
+# Template metadata
+template:
+  name: "email_services_base"
+  version: "1.0"
+  description: "Base email services configuration with security policies"
+  category: "services"
+  extends: null
+  variables:
+    - name: "domain_name"
+      type: "string"
+      default: "demo.company.com"
+      description: "Primary domain name for email services"
+    - name: "mail_server_ip"
+      type: "string"
+      default: "192.168.100.10"
+      description: "IP address of the mail server"
+    - name: "dns_server_ip"
+      type: "string"
+      default: "192.168.100.20"
+      description: "IP address of the DNS server"
+    - name: "max_message_size"
+      type: "integer"
+      default: 10485760
+      description: "Maximum email message size in bytes (10MB)"
+    - name: "max_attachment_size"
+      type: "integer"
+      default: 5242880
+      description: "Maximum attachment size in bytes (5MB)"
+    - name: "security_level"
+      type: "string"
+      default: "standard"
+      description: "Security level: minimal, standard, strict"
+
+# Base email services configuration
+email_services:
+  # SMTP Server Configuration
+  smtp_server:
+    service_type: "smtp-server"
+    hostname: "mail_server"
+    ip_address: "${mail_server_ip}"
+    port: 25
+    domain: "${domain_name}"
+    
+    # Basic Configuration
+    max_message_size: ${max_message_size}
+    max_attachment_size: ${max_attachment_size}
+    max_recipients_per_message: 50
+    max_connections: 100
+    connection_timeout: 300  # 5 minutes
+    require_auth: false  # For demonstration purposes
+    enable_tls: true
+    enable_security_logging: true
+    enable_attachment_scanning: true
+    
+    # Security Policies - Baseline Configuration
+    security_policies:
+      # Sender-based blocking
+      blocked_senders:
+        - "phishing@attacker.com"
+        - "malware@badactor.net"
+        - "spam@suspicious.org"
+        - "noreply@phishing-site.com"
+        - "*@known-phishing.com"  # Wildcard domain blocking
+      
+      # IP-based blocking (CIDR notation supported)
+      blocked_ips:
+        - "203.0.113.50"      # Single malicious IP
+        - "198.51.100.0/24"   # Malicious subnet
+        - "192.0.2.0/24"      # Another test malicious subnet
+      
+      # Content-based filtering
+      quarantine_keywords:
+        - "urgent wire transfer"
+        - "click here immediately"
+        - "verify your account"
+        - "suspended account"
+        - "confirm your identity"
+      
+      # Attachment restrictions
+      attachment_restrictions:
+        blocked_extensions:
+          - ".exe"
+          - ".scr"
+          - ".bat"
+          - ".com"
+          - ".pif"
+          - ".cmd"
+          - ".vbs"
+        max_size_mb: 5
+        scan_for_malware: true
+        quarantine_suspicious: true
+      
+      # Rate limiting
+      rate_limiting:
+        max_emails_per_hour: 100
+        max_emails_per_day: 500
+        max_recipients_per_hour: 200
+        burst_threshold: 10  # Max emails in 1 minute
+    
+    # Mailbox Configuration
+    mailbox_settings:
+      default_quota_mb: 1000  # 1GB per user
+      max_message_age_days: 365
+      auto_cleanup_enabled: true
+      backup_enabled: true
+      backup_retention_days: 30
+    
+    # Logging Configuration
+    logging:
+      log_level: "INFO"
+      log_all_connections: true
+      log_blocked_attempts: true
+      log_security_events: true
+      log_attachment_scans: true
+      retention_days: 90
+      export_format: "json"
+
+  # POP3 Server Configuration
+  pop3_server:
+    service_type: "pop3-server"
+    hostname: "mail_server"
+    ip_address: "${mail_server_ip}"
+    port: 110
+    domain: "${domain_name}"
+    
+    # Basic Configuration
+    max_connections: 50
+    connection_timeout: 600  # 10 minutes
+    require_auth: false  # For demonstration purposes
+    enable_tls: true
+    enable_security_logging: true
+    
+    # Security Settings
+    security_settings:
+      max_login_attempts: 3
+      lockout_duration: 300  # 5 minutes
+      session_timeout: 1800  # 30 minutes
+      enable_ip_whitelisting: false
+      allowed_ip_ranges:
+        - "192.168.1.0/24"    # Corporate network
+        - "192.168.50.0/24"   # Remote office
+    
+    # Performance Settings
+    performance:
+      max_concurrent_sessions: 25
+      max_messages_per_session: 1000
+      max_download_size_mb: 100
+      enable_caching: true
+      cache_size_mb: 256
+
+  # DNS Server Configuration
+  dns_server:
+    service_type: "dns-server"
+    hostname: "dns_server"
+    ip_address: "${dns_server_ip}"
+    port: 53
+    domain: "${domain_name}"
+    
+    # Basic Configuration
+    authoritative: true
+    recursive: true
+    enable_caching: true
+    cache_ttl: 3600  # 1 hour
+    max_cache_size_mb: 128
+    
+    # DNS Records
+    dns_records:
+      # A Records
+      a_records:
+        - name: "mail.${domain_name}"
+          ip: "${mail_server_ip}"
+          ttl: 3600
+        - name: "dns.${domain_name}"
+          ip: "${dns_server_ip}"
+          ttl: 3600
+        - name: "${domain_name}"
+          ip: "192.168.100.30"
+          ttl: 3600
+      
+      # MX Records (Mail Exchange)
+      mx_records:
+        - name: "${domain_name}"
+          mail_server: "mail.${domain_name}"
+          priority: 10
+          ttl: 3600
+      
+      # CNAME Records
+      cname_records:
+        - name: "smtp.${domain_name}"
+          target: "mail.${domain_name}"
+          ttl: 3600
+        - name: "pop3.${domain_name}"
+          target: "mail.${domain_name}"
+          ttl: 3600
+      
+      # TXT Records (SPF, DKIM, DMARC)
+      txt_records:
+        - name: "${domain_name}"
+          value: "v=spf1 ip4:${mail_server_ip} -all"
+          ttl: 3600
+          description: "SPF record"
+        - name: "_dmarc.${domain_name}"
+          value: "v=DMARC1; p=quarantine; rua=mailto:dmarc@${domain_name}"
+          ttl: 3600
+          description: "DMARC policy"
+    
+    # Security Settings
+    security_settings:
+      enable_dnssec: true
+      block_malicious_domains: true
+      blocked_domains:
+        - "known-phishing.com"
+        - "malicious-domain.net"
+        - "fake-bank.com"
+        - "suspicious.org"
+      enable_query_logging: true
+      max_queries_per_second: 1000
+      enable_rate_limiting: true
+
+# User Account Configuration
+user_accounts:
+  # Corporate Users
+  - username: "alice@${domain_name}"
+    display_name: "Alice Marketing"
+    department: "Marketing"
+    role: "Marketing Manager"
+    quota_mb: 2000
+    enabled: true
+    security_level: "standard"
+    
+  - username: "bob@${domain_name}"
+    display_name: "Bob Developer"
+    department: "Engineering"
+    role: "Senior Developer"
+    quota_mb: 1500
+    enabled: true
+    security_level: "standard"
+    
+  - username: "charlie@${domain_name}"
+    display_name: "Charlie Assistant"
+    department: "Administration"
+    role: "Executive Assistant"
+    quota_mb: 1000
+    enabled: true
+    security_level: "standard"
+    
+  - username: "security@${domain_name}"
+    display_name: "Security Team"
+    department: "IT Security"
+    role: "Security Analyst"
+    quota_mb: 5000
+    enabled: true
+    security_level: "admin"
+    
+  - username: "remote@${domain_name}"
+    display_name: "Remote Worker"
+    department: "Field Operations"
+    role: "Field Worker"
+    quota_mb: 500
+    enabled: true
+    security_level: "limited"
+
+# Service Lifecycle Management
+service_lifecycle:
+  startup_order:
+    1: "dns-server"
+    2: "smtp-server"
+    3: "pop3-server"
+  
+  shutdown_order:
+    1: "pop3-server"
+    2: "smtp-server"
+    3: "dns-server"
+  
+  health_checks:
+    dns_server:
+      check_type: "port"
+      port: 53
+      interval: 30
+      timeout: 5
+      
+    smtp_server:
+      check_type: "smtp"
+      port: 25
+      interval: 60
+      timeout: 10
+      test_command: "HELO test"
+      
+    pop3_server:
+      check_type: "port"
+      port: 110
+      interval: 60
+      timeout: 10
+
+# Security Event Templates
+security_event_templates:
+  blocked_sender:
+    event_type: "email_blocked"
+    severity: "medium"
+    description: "Email blocked due to sender policy"
+    action: "block"
+    
+  blocked_ip:
+    event_type: "connection_blocked"
+    severity: "high"
+    description: "Connection blocked due to IP policy"
+    action: "block"
+    
+  quarantine:
+    event_type: "email_quarantined"
+    severity: "medium"
+    description: "Email quarantined due to content policy"
+    action: "quarantine"
+    
+  malicious_attachment:
+    event_type: "malware_detected"
+    severity: "high"
+    description: "Malicious attachment detected"
+    action: "quarantine"
+
+# Configuration metadata
+metadata:
+  template_type: "base"
+  category: "email_services"
+  version: "1.0"
+  description: "Base email services configuration for security demonstrations"
+  created_date: "2025-01-27"
+  
+  features:
+    - "SMTP server with security policies"
+    - "POP3 server with authentication"
+    - "DNS server with security records"
+    - "Comprehensive logging and monitoring"
+    - "Attachment scanning and restrictions"
+    - "Rate limiting and reputation filtering"
+    - "Service lifecycle management"
+    - "Security event templates"
+  
+  security_controls:
+    - "Sender and IP blocking"
+    - "Content-based filtering"
+    - "Attachment restrictions"
+    - "Rate limiting"
+    - "DNS security"
+    - "Comprehensive logging"
+    - "Health monitoring"
+  
+  customization_points:
+    - "Domain configuration"
+    - "Security policy levels"
+    - "User account setup"
+    - "Service parameters"
+    - "Logging preferences"
